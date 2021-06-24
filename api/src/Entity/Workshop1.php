@@ -36,9 +36,15 @@ class Workshop1
      */
     private $businessAssets;
 
+    /**
+     * @ORM\OneToMany(targetEntity=SecurityBaseline::class, mappedBy="workshop1", orphanRemoval=true)
+     */
+    private $securityBaselines;
+
     public function __construct()
     {
         $this->businessAssets = new ArrayCollection();
+        $this->securityBaselines = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,36 @@ class Workshop1
             // set the owning side to null (unless already changed)
             if ($businessAsset->getWorkshop1() === $this) {
                 $businessAsset->setWorkshop1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SecurityBaseline[]
+     */
+    public function getSecurityBaselines(): Collection
+    {
+        return $this->securityBaselines;
+    }
+
+    public function addSecurityBaseline(SecurityBaseline $securityBaseline): self
+    {
+        if (!$this->securityBaselines->contains($securityBaseline)) {
+            $this->securityBaselines[] = $securityBaseline;
+            $securityBaseline->setWorkshop1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSecurityBaseline(SecurityBaseline $securityBaseline): self
+    {
+        if ($this->securityBaselines->removeElement($securityBaseline)) {
+            // set the owning side to null (unless already changed)
+            if ($securityBaseline->getWorkshop1() === $this) {
+                $securityBaseline->setWorkshop1(null);
             }
         }
 
