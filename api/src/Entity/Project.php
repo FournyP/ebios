@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -27,6 +27,12 @@ class Project
      * @ORM\JoinColumn(nullable=false)
      */
     private $organization;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ProjectParameters::class, mappedBy="project", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $projectParameters;
 
     public function getId(): ?int
     {
@@ -53,6 +59,23 @@ class Project
     public function setOrganization(?Organization $organization): self
     {
         $this->organization = $organization;
+
+        return $this;
+    }
+
+    public function getProjectParameters(): ?ProjectParameters
+    {
+        return $this->projectParameters;
+    }
+
+    public function setProjectParameters(ProjectParameters $projectParameters): self
+    {
+        // set the owning side of the relation if necessary
+        if ($projectParameters->getProject() !== $this) {
+            $projectParameters->setProject($this);
+        }
+
+        $this->projectParameters = $projectParameters;
 
         return $this;
     }
