@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\Workshop2Repository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\Workshop2Repository;
 
 /**
  * @ORM\Entity(repositoryClass=Workshop2Repository::class)
@@ -27,6 +29,17 @@ class Workshop2
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Risk::class, mappedBy="workshop2", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $risks;
+
+    public function __construct()
+    {
+        $this->risks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -53,6 +66,36 @@ class Workshop2
     public function setProject(Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Risk[]
+     */
+    public function getRisks(): Collection
+    {
+        return $this->risks;
+    }
+
+    public function addRisk(Risk $risk): self
+    {
+        if (!$this->risks->contains($risk)) {
+            $this->risks[] = $risk;
+            $risk->setWorkshop2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRisk(Risk $risk): self
+    {
+        if ($this->risks->removeElement($risk)) {
+            // set the owning side to null (unless already changed)
+            if ($risk->getWorkshop2() === $this) {
+                $risk->setWorkshop2(null);
+            }
+        }
 
         return $this;
     }
