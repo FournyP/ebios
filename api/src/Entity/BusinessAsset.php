@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\BusinessAssetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\BusinessAssetRepository;
 
 /**
  * @ORM\Entity(repositoryClass=BusinessAssetRepository::class)
@@ -42,6 +44,24 @@ class BusinessAsset
      * @ORM\JoinColumn(nullable=false)
      */
     private $workshop1;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SupportingAsset::class, mappedBy="businessAsset", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $supportingAssets;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FearedEvent::class, mappedBy="businessAsset", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $fearedEvents;
+
+    public function __construct()
+    {
+        $this->supportingAssets = new ArrayCollection();
+        $this->fearedEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +124,66 @@ class BusinessAsset
     public function setWorkshop1(?Workshop1 $workshop1): self
     {
         $this->workshop1 = $workshop1;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SupportingAsset[]
+     */
+    public function getSupportingAssets(): Collection
+    {
+        return $this->supportingAssets;
+    }
+
+    public function addSupportingAsset(SupportingAsset $supportingAsset): self
+    {
+        if (!$this->supportingAssets->contains($supportingAsset)) {
+            $this->supportingAssets[] = $supportingAsset;
+            $supportingAsset->setBusinessAsset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSupportingAsset(SupportingAsset $supportingAsset): self
+    {
+        if ($this->supportingAssets->removeElement($supportingAsset)) {
+            // set the owning side to null (unless already changed)
+            if ($supportingAsset->getBusinessAsset() === $this) {
+                $supportingAsset->setBusinessAsset(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FearedEvent[]
+     */
+    public function getFearedEvents(): Collection
+    {
+        return $this->fearedEvents;
+    }
+
+    public function addFearedEvent(FearedEvent $fearedEvent): self
+    {
+        if (!$this->fearedEvents->contains($fearedEvent)) {
+            $this->fearedEvents[] = $fearedEvent;
+            $fearedEvent->setBusinessAsset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFearedEvent(FearedEvent $fearedEvent): self
+    {
+        if ($this->fearedEvents->removeElement($fearedEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($fearedEvent->getBusinessAsset() === $this) {
+                $fearedEvent->setBusinessAsset(null);
+            }
+        }
 
         return $this;
     }
