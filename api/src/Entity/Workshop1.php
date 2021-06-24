@@ -38,6 +38,7 @@ class Workshop1
 
     /**
      * @ORM\OneToMany(targetEntity=SecurityBaseline::class, mappedBy="workshop1", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $securityBaselines;
 

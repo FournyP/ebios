@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\SecurityBaselineRepository;
 
 /**
@@ -18,7 +20,7 @@ class SecurityBaseline
     private $id;
 
     /**
-     * @ORM\Column(type="string", Length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $referenceStandardType;
 
@@ -37,6 +39,17 @@ class SecurityBaseline
      * @ORM\JoinColumn(nullable=false)
      */
     private $workshop1;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Gap::class, mappedBy="securityBaseline", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $gaps;
+
+    public function __construct()
+    {
+        $this->gaps = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +100,36 @@ class SecurityBaseline
     public function setWorkshop1(?Workshop1 $workshop1): self
     {
         $this->workshop1 = $workshop1;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Gap[]
+     */
+    public function getGaps(): Collection
+    {
+        return $this->gaps;
+    }
+
+    public function addGap(Gap $gap): self
+    {
+        if (!$this->gaps->contains($gap)) {
+            $this->gaps[] = $gap;
+            $gap->setSecurityBaseline($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGap(Gap $gap): self
+    {
+        if ($this->gaps->removeElement($gap)) {
+            // set the owning side to null (unless already changed)
+            if ($gap->getSecurityBaseline() === $this) {
+                $gap->setSecurityBaseline(null);
+            }
+        }
 
         return $this;
     }
