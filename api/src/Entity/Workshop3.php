@@ -31,9 +31,16 @@ class Workshop3
      */
     private $stakeHolderCategories;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StrategicScenario::class, mappedBy="workshop3", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $strategicScenarios;
+
     public function __construct()
     {
         $this->stakeHolderCategories = new ArrayCollection();
+        $this->strategicScenarios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,6 +84,36 @@ class Workshop3
             // set the owning side to null (unless already changed)
             if ($stakeHolderCategory->getWorkshop3() === $this) {
                 $stakeHolderCategory->setWorkshop3(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategicScenario[]
+     */
+    public function getStrategicScenarios(): Collection
+    {
+        return $this->strategicScenarios;
+    }
+
+    public function addStrategicScenario(StrategicScenario $strategicScenario): self
+    {
+        if (!$this->strategicScenarios->contains($strategicScenario)) {
+            $this->strategicScenarios[] = $strategicScenario;
+            $strategicScenario->setWorkshop3($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategicScenario(StrategicScenario $strategicScenario): self
+    {
+        if ($this->strategicScenarios->removeElement($strategicScenario)) {
+            // set the owning side to null (unless already changed)
+            if ($strategicScenario->getWorkshop3() === $this) {
+                $strategicScenario->setWorkshop3(null);
             }
         }
 

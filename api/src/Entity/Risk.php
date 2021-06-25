@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\RiskRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\RiskRepository;
 
 /**
  * @ORM\Entity(repositoryClass=RiskRepository::class)
@@ -37,6 +39,17 @@ class Risk
      * @ORM\JoinColumn(nullable=false)
      */
     private $workshop2;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StrategicScenario::class, mappedBy="risk", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $strategicScenarios;
+
+    public function __construct()
+    {
+        $this->strategicScenarios = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +100,36 @@ class Risk
     public function setWorkshop2(?Workshop2 $workshop2): self
     {
         $this->workshop2 = $workshop2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StrategicScenario[]
+     */
+    public function getStrategicScenarios(): Collection
+    {
+        return $this->strategicScenarios;
+    }
+
+    public function addStrategicScenario(StrategicScenario $strategicScenario): self
+    {
+        if (!$this->strategicScenarios->contains($strategicScenario)) {
+            $this->strategicScenarios[] = $strategicScenario;
+            $strategicScenario->setRisk($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStrategicScenario(StrategicScenario $strategicScenario): self
+    {
+        if ($this->strategicScenarios->removeElement($strategicScenario)) {
+            // set the owning side to null (unless already changed)
+            if ($strategicScenario->getRisk() === $this) {
+                $strategicScenario->setRisk(null);
+            }
+        }
 
         return $this;
     }
