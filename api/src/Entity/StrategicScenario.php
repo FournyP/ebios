@@ -44,6 +44,12 @@ class StrategicScenario
      */
     private $workshop3;
 
+    /**
+     * @ORM\OneToOne(targetEntity=OperationalScenario::class, mappedBy="strategicScenario", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $operationalScenario;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +111,23 @@ class StrategicScenario
     public function setWorkshop3(?Workshop3 $workshop3): self
     {
         $this->workshop3 = $workshop3;
+
+        return $this;
+    }
+
+    public function getOperationalScenario(): ?OperationalScenario
+    {
+        return $this->operationalScenario;
+    }
+
+    public function setOperationalScenario(OperationalScenario $operationalScenario): self
+    {
+        // set the owning side of the relation if necessary
+        if ($operationalScenario->getStrategicScenario() !== $this) {
+            $operationalScenario->setStrategicScenario($this);
+        }
+
+        $this->operationalScenario = $operationalScenario;
 
         return $this;
     }
