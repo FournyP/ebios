@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\StakeHolderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\StakeHolderRepository;
 
 /**
  * @ORM\Entity(repositoryClass=StakeHolderRepository::class)
@@ -42,6 +44,17 @@ class StakeHolder
      * @ORM\JoinColumn(nullable=false)
      */
     private $stakeHolderCategory;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SecurityMeasure::class, mappedBy="stakeHolder", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $securityMeasures;
+
+    public function __construct()
+    {
+        $this->securityMeasures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +117,36 @@ class StakeHolder
     public function setStakeHolderCategory(?StakeHolderCategory $stakeHolderCategory): self
     {
         $this->stakeHolderCategory = $stakeHolderCategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SecurityMeasure[]
+     */
+    public function getSecurityMeasures(): Collection
+    {
+        return $this->securityMeasures;
+    }
+
+    public function addSecurityMeasure(SecurityMeasure $securityMeasure): self
+    {
+        if (!$this->securityMeasures->contains($securityMeasure)) {
+            $this->securityMeasures[] = $securityMeasure;
+            $securityMeasure->setStakeHolder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSecurityMeasure(SecurityMeasure $securityMeasure): self
+    {
+        if ($this->securityMeasures->removeElement($securityMeasure)) {
+            // set the owning side to null (unless already changed)
+            if ($securityMeasure->getStakeHolder() === $this) {
+                $securityMeasure->setStakeHolder(null);
+            }
+        }
 
         return $this;
     }
