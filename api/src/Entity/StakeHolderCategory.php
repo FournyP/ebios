@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\StakeHolderCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\StakeHolderCategoryRepository;
 
 /**
  * @ORM\Entity(repositoryClass=StakeHolderCategoryRepository::class)
@@ -27,6 +29,17 @@ class StakeHolderCategory
      * @ORM\JoinColumn(nullable=false)
      */
     private $workshop3;
+
+    /**
+     * @ORM\OneToMany(targetEntity=StakeHolder::class, mappedBy="stakeHolderCategory", orphanRemoval=true)
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $stakeHolders;
+
+    public function __construct()
+    {
+        $this->stakeHolders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -53,6 +66,36 @@ class StakeHolderCategory
     public function setWorkshop3(?Workshop3 $workshop3): self
     {
         $this->workshop3 = $workshop3;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StakeHolder[]
+     */
+    public function getStakeHolders(): Collection
+    {
+        return $this->stakeHolders;
+    }
+
+    public function addStakeHolder(StakeHolder $stakeHolder): self
+    {
+        if (!$this->stakeHolders->contains($stakeHolder)) {
+            $this->stakeHolders[] = $stakeHolder;
+            $stakeHolder->setStakeHolderCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStakeHolder(StakeHolder $stakeHolder): self
+    {
+        if ($this->stakeHolders->removeElement($stakeHolder)) {
+            // set the owning side to null (unless already changed)
+            if ($stakeHolder->getStakeHolderCategory() === $this) {
+                $stakeHolder->setStakeHolderCategory(null);
+            }
+        }
 
         return $this;
     }
