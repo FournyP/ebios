@@ -32,7 +32,7 @@ function Appbar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        Ebios Risk Manager
+                        EBIOS Risk Manager
                     </Typography>
                     <div>
                         <IconButton
