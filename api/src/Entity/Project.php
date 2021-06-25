@@ -58,6 +58,12 @@ class Project
      */
     private $workshop4;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Workshop5::class, mappedBy="project", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $workshop5;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -168,6 +174,23 @@ class Project
         }
 
         $this->workshop4 = $workshop4;
+
+        return $this;
+    }
+
+    public function getWorkshop5(): ?Workshop5
+    {
+        return $this->workshop5;
+    }
+
+    public function setWorkshop5(Workshop5 $workshop5): self
+    {
+        // set the owning side of the relation if necessary
+        if ($workshop5->getProject() !== $this) {
+            $workshop5->setProject($this);
+        }
+
+        $this->workshop5 = $workshop5;
 
         return $this;
     }

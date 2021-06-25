@@ -42,9 +42,16 @@ class OperationalScenario
      */
     private $columnActions;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Measure::class, mappedBy="operationalScenario")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $measures;
+
     public function __construct()
     {
         $this->columnActions = new ArrayCollection();
+        $this->measures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +120,33 @@ class OperationalScenario
             if ($columnAction->getOperationalScenario() === $this) {
                 $columnAction->setOperationalScenario(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Measure[]
+     */
+    public function getMeasures(): Collection
+    {
+        return $this->measures;
+    }
+
+    public function addMeasure(Measure $measure): self
+    {
+        if (!$this->measures->contains($measure)) {
+            $this->measures[] = $measure;
+            $measure->addOperationalScenario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeasure(Measure $measure): self
+    {
+        if ($this->measures->removeElement($measure)) {
+            $measure->removeOperationalScenario($this);
         }
 
         return $this;
