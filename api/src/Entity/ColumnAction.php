@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ColumnActionRepository;
 use App\Entity\OperationalScenario;
@@ -29,6 +31,16 @@ class ColumnAction
      */
     private $operationalScenario;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Action::class, mappedBy="columnAction", orphanRemoval=true)
+     */
+    private $actions;
+
+    public function __construct()
+    {
+        $this->actions = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +66,36 @@ class ColumnAction
     public function setOperationalScenario(?OperationalScenario $operationalScenario): self
     {
         $this->operationalScenario = $operationalScenario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setColumnAction($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->removeElement($action)) {
+            // set the owning side to null (unless already changed)
+            if ($action->getColumnAction() === $this) {
+                $action->setColumnAction(null);
+            }
+        }
 
         return $this;
     }
