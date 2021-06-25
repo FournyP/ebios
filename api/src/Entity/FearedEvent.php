@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\FearedEventRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FearedEventRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=FearedEventRepository::class)
  */
+#[ApiResource()]
 class FearedEvent
 {
     /**

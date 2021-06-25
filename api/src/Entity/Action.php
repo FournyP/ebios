@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ActionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\ActionRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=ActionRepository::class)
  */
+#[ApiResource()]
 class Action
 {
     /**

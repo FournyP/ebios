@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectParametersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectParametersRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectParametersRepository::class)
  */
+#[ApiResource()]
 class ProjectParameters
 {
     /**

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\GapRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\GapRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=GapRepository::class)
  */
+#[ApiResource()]
 class Gap
 {
     /**

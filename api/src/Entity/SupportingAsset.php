@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\SupportingAssetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SupportingAssetRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=SupportingAssetRepository::class)
  */
+#[ApiResource()]
 class SupportingAsset
 {
     /**

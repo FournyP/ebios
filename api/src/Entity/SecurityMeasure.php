@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\SecurityMeasureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SecurityMeasureRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=SecurityMeasureRepository::class)
  */
+#[ApiResource()]
 class SecurityMeasure
 {
     /**
