@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Signin from './components/Signin';
 import Signup from './components/Signup';
 import Project from './components/Project';
+import CreateProject from './components/CreateProject';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route exact from="/Signin" component={Signin} />
           <Route exact from="/Signup" component={Signup} />
           <Route exact from="/Project" component={Project} />
+          <Route exact from="/CreateProject" component={CreateProject} />
         </Switch>
       </Router>
     </div>
