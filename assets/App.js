@@ -1,10 +1,11 @@
-import './App.css';
+import React from "react";
+import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home from './components/Home';
-import Signin from './components/Signin';
-import Signup from './components/Signup';
-import Project from './components/Project';
-import CreateProject from './components/CreateProject';
+import Home from "./components/Home";
+import Signin from "./components/Signin";
+import Signup from "./components/Signup";
+import Project from "./components/Project";
+import CreateProject from "./components/CreateProject";
 
 function App() {
   return (
