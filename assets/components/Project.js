@@ -1,5 +1,5 @@
+import React from "react";
 import Appbar from "./Appbar";
-import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -49,7 +49,22 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
     tabs: {
         background: '#555',
-    }
+    },
+    tab1: {
+        background: '#c7317c',
+    },
+    tab2: {
+        background: '#6d2a69',
+    },
+    tab3: {
+        background: '#24aca9',
+    },
+    tab4: {
+        background: '#c2a91f',
+    },
+    tab5: {
+        background: '#d54956',
+    },
 }));
 
 function Project() {
@@ -60,7 +75,7 @@ function Project() {
         setValue(newValue);
     };
     return (
-        <div className="Project">
+        <div>
             <Appbar />
             <AppBar position="static">
                 <Tabs
@@ -70,11 +85,11 @@ function Project() {
                     variant="fullWidth"
                     className={classes.tabs}
                 >
-                    <Tab label="Atelier 1" {...a11yProps(0)} />
-                    <Tab label="Atelier 2" {...a11yProps(1)} />
-                    <Tab label="Atelier 3" {...a11yProps(2)} />
-                    <Tab label="Atelier 4" {...a11yProps(3)} />
-                    <Tab label="Atelier 5" {...a11yProps(4)} />
+                    <Tab label="Atelier 1" {...a11yProps(0)} className={classes.tab1} />
+                    <Tab label="Atelier 2" {...a11yProps(1)} className={classes.tab2} />
+                    <Tab label="Atelier 3" {...a11yProps(2)} className={classes.tab3} />
+                    <Tab label="Atelier 4" {...a11yProps(3)} className={classes.tab4} />
+                    <Tab label="Atelier 5" {...a11yProps(4)} className={classes.tab5} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
