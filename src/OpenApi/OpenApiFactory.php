@@ -122,6 +122,8 @@ class OpenApiFactory implements OpenApiFactoryInterface {
             )
         );
 
+        $openApi->getPaths()->addPath('/api/register', $pathItem);
+
         return $openApi;
     }
 }
