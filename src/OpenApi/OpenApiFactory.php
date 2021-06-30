@@ -95,6 +95,33 @@ class OpenApiFactory implements OpenApiFactoryInterface {
 
         $openApi->getPaths()->addPath('/api/logout', $pathItem);
 
+        $pathItem = new PathItem(
+            post: new Operation(
+                operationId: 'postApiRegister',
+                tags:['Auth'],
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/Credentials'
+                            ]
+                        ]
+                    ])
+                ),
+                responses: [
+                    '201' => [
+                        'description' => "User created"
+                    ],
+                    '400' => [
+                        'description' => "Credentials are invalid"
+                    ],
+                    '401' => [
+                        'description' => "Credentials are empty"
+                    ]
+                ]
+            )
+        );
+
         return $openApi;
     }
 }
