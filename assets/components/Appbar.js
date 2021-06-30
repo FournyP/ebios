@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import Button from "@material-ui/core/Button";
+import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +26,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Appbar() {
   const classes = useStyles();
+  const [isLogged, setIsLogged] = useState(localStorage.getItem('username') ? true : false);
+  const handleLogout = () => {
+    localStorage.removeItem("username")
+    localStorage.removeItem("roles")
+    setIsLogged(false)
+    window.location.reload();
+  }
 
   return (
     <div className={classes.root}>
@@ -36,18 +45,17 @@ function Appbar() {
             EBIOS Risk Manager
           </Typography>
           <div>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Button color="inherit" component={Link} to="/signup">Signup</Button>
+
+            {isLogged ?
+              <Button color="inherit" onClick={handleLogout}>Logout</Button>
+              :
+              <Button color="inherit" component={Link} to="/signin">Login</Button>
+            }
           </div>
         </Toolbar>
       </AppBar>
-    </div>
+    </div >
   );
 }
 export default Appbar;
