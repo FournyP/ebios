@@ -31,13 +31,13 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: "/api/register", name: "api_register", methods: ['POST'])]
-    public function new(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager): Response 
+    public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager): Response 
     {
         if ($this->getUser() === null) 
         {
             $user = new User();
 
-            $email = $request->get('email');
+            $email = $request->get('username');
             $password = $request->get('password');
 
             if ($email != null && $password != null)
