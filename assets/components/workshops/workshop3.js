@@ -1,3 +1,5 @@
+import React from "react";
+
 function Workshop3() {
     return (
         <div className="Home">
