@@ -37,8 +37,9 @@ class SecurityController extends AbstractController
         {
             $user = new User();
 
-            $email = $request->get('username');
-            $password = $request->get('password');
+            $parameters = \json_decode($request->getContent(), true);
+            $email = $parameters['username'];
+            $password = $parameters['password'];
 
             if ($email != null && $password != null)
             {
@@ -47,7 +48,9 @@ class SecurityController extends AbstractController
 
                 $validation = $validator->validate($user);
 
-                if ($validation->count() != 0)
+                dd($validation);
+
+                if ($validation->count() == 0)
                 {
                     $entityManager->persist($user);
                     $entityManager->flush();
