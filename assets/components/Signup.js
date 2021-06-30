@@ -1,5 +1,5 @@
 import Appbar from "./Appbar";
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,23 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from './logo.png';
+import Alert from '@material-ui/lab/Alert';
+import { useHistory } from "react-router-dom";
+
+
+
+async function registerUser(credentials) {
+    console.log(JSON.stringify(credentials))
+    return fetch('https://127.0.0.1:8000/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+    }).then(response => {
+        if (!response.ok) { console.log(response); throw response.status }
+    })
+}
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -32,50 +49,45 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+    const history = useHistory();
     const classes = useStyles();
+    const [username, setUserName] = useState();
+    const [password, setPassword] = useState();
+    const [alert, setAlert] = useState(false);
+    const [alertMsg, setAlertMsg] = useState('');
 
+    const handleSubmit = async e => {
+        e.preventDefault();
+        try {
+            await registerUser({
+                username,
+                password
+            });
+            history.push("/");
+        } catch (e) {
+            setAlert(true);
+            setAlertMsg(e);
+        }
+    }
     return (
-
         <div>
             <Appbar />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
                     <img className={classes.avatar} src={logo} alt="Logo" />
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="lname"
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="email"
+                                    id="username"
                                     label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
+                                    name="username"
+                                    autoComplete="username"
+                                    onChange={e => setUserName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -88,6 +100,7 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={e => setPassword(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,6 +110,7 @@ export default function SignUp() {
                                 />
                             </Grid>
                         </Grid>
+                        {alert ? <Alert severity='error'>{alertMsg}</Alert> : <></>}
                         <Button
                             type="submit"
                             fullWidth
@@ -108,7 +122,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/signin" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
@@ -116,6 +130,6 @@ export default function SignUp() {
                     </form>
                 </div>
             </Container>
-        </div>
+        </div >
     );
 }
