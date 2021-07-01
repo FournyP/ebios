@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=Workshop4Repository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Workshop4']],
+    denormalizationContext: ['groups' => ['write:Workshop4']]
+)]
 class Workshop4
 {
     /**
@@ -20,19 +23,21 @@ class Workshop4
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Project"])]
+    #[Groups(["read:Project", "read:Workshop4"])]
     private $id;
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, inversedBy="workshop4", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:Workshop4", "write:Workshop4"])]
     private $project;
 
     /**
      * @ORM\OneToMany(targetEntity=OperationalScenario::class, mappedBy="workshop4", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:Workshop4"])]
     private $operationalScenarios;
 
     public function __construct()
