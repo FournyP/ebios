@@ -18,7 +18,7 @@ class StrategicScenario
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Risk"])]
+    #[Groups(["read:Risk", "read:Workshop3"])]
     private $id;
 
     /**
