@@ -59,7 +59,7 @@ function CreateProject() {
       </Container>
 
       <Button variant="contained" color="primary">
-        Primary
+        Créer le projet
       </Button>
     </div >
   );

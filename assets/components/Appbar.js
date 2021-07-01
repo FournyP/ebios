@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Appbar() {
+  const history = useHistory();
   const classes = useStyles();
   const [isLogged, setIsLogged] = useState(localStorage.getItem('username') ? true : false);
   const handleLogout = () => {
@@ -32,6 +34,9 @@ function Appbar() {
     localStorage.removeItem("roles")
     setIsLogged(false)
     window.location.reload();
+  }
+  function handleClick() {
+    history.push("/");
   }
 
   return (
@@ -41,7 +46,7 @@ function Appbar() {
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography className={classes.title} onClick={handleClick} >
             EBIOS Risk Manager
           </Typography>
           <div>
