@@ -23,20 +23,20 @@ class Workshop1
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Project", "read:Workshop1"])]
+    #[Groups(["read:Project", "read:Workshop1", "read:BusinessAsset"])]
     private $id;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[Groups("read:Workshop1", "write:Workshop1")]
+    #[Groups(["read:Workshop1", "write:Workshop1"])]
     private $workshopContributors = [];
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, inversedBy="workshop1", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups("read:Workshop1", "write:Workshop1")]
+    #[Groups(["read:Workshop1", "write:Workshop1"])]
     private $project;
 
     /**

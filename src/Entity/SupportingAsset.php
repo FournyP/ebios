@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SupportingAssetRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -17,6 +18,7 @@ class SupportingAsset
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(["read:BusinessAsset"])]
     private $id;
 
     /**

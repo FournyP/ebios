@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=BusinessAssetRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:BusinessAsset']],
+    denormalizationContext: ['groups' => ['write:BusinessAsset']]
+)]
 class BusinessAsset
 {
     /**
@@ -20,45 +23,52 @@ class BusinessAsset
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups("read:Workshop1")]
+    #[Groups(["read:Workshop1", "read:BusinessAsset"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:BusinessAsset", "write:BusinessAsset"])]
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:BusinessAsset", "write:BusinessAsset"])]
     private $value;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    #[Groups(["read:BusinessAsset", "write:BusinessAsset"])]
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:BusinessAsset", "write:BusinessAsset"])]
     private $manager;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop1::class, inversedBy="businessAssets")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:BusinessAsset", "write:BusinessAsset"])]
     private $workshop1;
 
     /**
      * @ORM\OneToMany(targetEntity=SupportingAsset::class, mappedBy="businessAsset", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:BusinessAsset"])]
     private $supportingAssets;
 
     /**
      * @ORM\OneToMany(targetEntity=FearedEvent::class, mappedBy="businessAsset", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:BusinessAsset"])]
     private $fearedEvents;
 
     public function __construct()
