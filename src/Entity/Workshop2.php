@@ -23,7 +23,7 @@ class Workshop2
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Project", "read:Workshop2"])]
+    #[Groups(["read:Project", "read:Workshop2", "read:Risk"])]
     private $id;
 
     /**

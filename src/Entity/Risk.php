@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=RiskRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Risk']],
+    denormalizationContext: ['groups' => ['write:Risk']]
+)]
 class Risk
 {
     /**
@@ -20,34 +23,39 @@ class Risk
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop2"])]
+    #[Groups(["read:Workshop2", "read:Risk"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Risk", "write:Risk"])]
     private $source;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Risk", "write:Risk"])]
     private $goal;
 
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(["read:Risk", "write:Risk"])]
     private $evaluation = [];
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop2::class, inversedBy="risks")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:Risk", "write:Risk"])]
     private $workshop2;
 
     /**
      * @ORM\OneToMany(targetEntity=StrategicScenario::class, mappedBy="risk", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:Risk"])]
     private $strategicScenarios;
 
     public function __construct()
