@@ -10,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=SupportingAssetRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:SupportingAsset']],
+    denormalizationContext: ['groups' => ['write:SupportingAsset']]
+)]
 class SupportingAsset
 {
     /**
@@ -18,28 +21,32 @@ class SupportingAsset
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:BusinessAsset"])]
+    #[Groups(["read:BusinessAsset", "read:SupportingAsset"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SupportingAsset", "write:SupportingAsset"])]
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    #[Groups(["read:SupportingAsset", "write:SupportingAsset"])]
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SupportingAsset", "write:SupportingAsset"])]
     private $manager;
 
     /**
      * @ORM\ManyToOne(targetEntity=BusinessAsset::class, inversedBy="supportingAssets")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:SupportingAsset", "write:SupportingAsset"])]
     private $businessAsset;
 
     public function getId(): ?int
