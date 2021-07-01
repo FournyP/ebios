@@ -10,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=FearedEventRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:FearedEvent']],
+    denormalizationContext: ['groups' => ['write:FearedEvent']]
+)]
 class FearedEvent
 {
     /**
@@ -18,28 +21,32 @@ class FearedEvent
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:BusinessAsset"])]
+    #[Groups(["read:BusinessAsset", "read:FearedEvent"])]
     private $id;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:FearedEvent", "write:FearedEvent"])]
     private $description;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:FearedEvent", "write:FearedEvent"])]
     private $impact;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:FearedEvent", "write:FearedEvent"])]
     private $severity;
 
     /**
      * @ORM\ManyToOne(targetEntity=BusinessAsset::class, inversedBy="fearedEvents")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:FearedEvent", "write:FearedEvent"])]
     private $businessAsset;
 
     public function getId(): ?int
