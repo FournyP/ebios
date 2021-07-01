@@ -23,7 +23,7 @@ class SecurityBaseline
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop1", "read:SecurityBaseline"])]
+    #[Groups(["read:Workshop1", "read:SecurityBaseline", "read:Gap"])]
     private $id;
 
     /**

@@ -10,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=GapRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Gap']],
+    denormalizationContext: ['groups' => ['write:Gap']]
+)]
 class Gap
 {
     /**
@@ -18,23 +21,26 @@ class Gap
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:SecurityBaseline"])]
+    #[Groups(["read:SecurityBaseline", "read:Gap"])]
     private $id;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:Gap", "write:Gap"])]
     private $description;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:Gap", "write:Gap"])]
     private $justification;
 
     /**
      * @ORM\ManyToOne(targetEntity=SecurityBaseline::class, inversedBy="gaps")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:Gap", "write:Gap"])]
     private $securityBaseline;
 
     public function getId(): ?int
