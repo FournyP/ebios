@@ -10,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=SecurityMeasureRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:SecurityMeasure']],
+    denormalizationContext: ['groups' => ['write:SecurityMeasure']]
+)]
 class SecurityMeasure
 {
     /**
@@ -18,33 +21,38 @@ class SecurityMeasure
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:StakeHolder"])]
+    #[Groups(["read:StakeHolder", "read:SecurityMeasure"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SecurityMeasure", "write:SecurityMeasure"])]
     private $strategicAttackPath;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:SecurityMeasure", "write:SecurityMeasure"])]
     private $measure;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:SecurityMeasure", "write:SecurityMeasure"])]
     private $initialThreat;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:SecurityMeasure", "write:SecurityMeasure"])]
     private $residualThreat;
 
     /**
      * @ORM\ManyToOne(targetEntity=StakeHolder::class, inversedBy="securityMeasures")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:SecurityMeasure", "write:SecurityMeasure"])]
     private $stakeHolder;
 
     public function getId(): ?int
