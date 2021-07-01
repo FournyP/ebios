@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=SecurityBaselineRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:SecurityBaseline']],
+    denormalizationContext: ['groups' => ['write:SecurityBaseline']]
+)]
 class SecurityBaseline
 {
     /**
@@ -20,34 +23,39 @@ class SecurityBaseline
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups("read:Workshop1")]
+    #[Groups(["read:Workshop1", "read:SecurityBaseline"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SecurityBaseline", "write:SecurityBaseline"])]
     private $referenceStandardType;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SecurityBaseline", "write:SecurityBaseline"])]
     private $referenceStandardName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:SecurityBaseline", "write:SecurityBaseline"])]
     private $implementationStatus;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop1::class, inversedBy="securityBaselines")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:SecurityBaseline", "write:SecurityBaseline"])]
     private $workshop1;
 
     /**
      * @ORM\OneToMany(targetEntity=Gap::class, mappedBy="securityBaseline", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:SecurityBaseline"])]
     private $gaps;
 
     public function __construct()
