@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=StakeHolderRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:StakeHolder']],
+    denormalizationContext: ['groups' => ['write:StakeHolder']]
+)]
 class StakeHolder
 {
     /**
@@ -20,39 +23,45 @@ class StakeHolder
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:StakeHolderCategory"])]
+    #[Groups(["read:StakeHolderCategory", "read:StakeHolder"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:StakeHolder", "write:StakeHolder"])]
     private $name;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:StakeHolder", "write:StakeHolder"])]
     private $exposure;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:StakeHolder", "write:StakeHolder"])]
     private $cyberReliability;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(["read:StakeHolder", "write:StakeHolder"])]
     private $selected;
 
     /**
      * @ORM\ManyToOne(targetEntity=StakeHolderCategory::class, inversedBy="stakeHolders")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:StakeHolder", "write:StakeHolder"])]
     private $stakeHolderCategory;
 
     /**
      * @ORM\OneToMany(targetEntity=SecurityMeasure::class, mappedBy="stakeHolder", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:StakeHolder"])]
     private $securityMeasures;
 
     public function __construct()

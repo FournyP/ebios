@@ -23,7 +23,7 @@ class StakeHolderCategory
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop3", "read:StakeHolderCategory"])]
+    #[Groups(["read:Workshop3", "read:StakeHolderCategory", "read:StakeHolder"])]
     private $id;
 
     /**
