@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,7 +13,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=ColumnActionRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:ColumnAction']],
+    denormalizationContext: ['groups' => ['write:ColumnAction']]
+)]
 class ColumnAction
 {
     /**
@@ -20,22 +24,26 @@ class ColumnAction
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(["read:OperationalScenario", "read:ColumnAction"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:ColumnAction", "write:ColumnAction"])]
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=OperationalScenario::class, inversedBy="columnActions")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:ColumnAction", "write:ColumnAction"])]
     private $operationalScenario;
 
     /**
      * @ORM\OneToMany(targetEntity=Action::class, mappedBy="columnAction", orphanRemoval=true)
      */
+    #[Groups(["read:ColumnAction"])]
     private $actions;
 
     public function __construct()

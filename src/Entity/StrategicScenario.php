@@ -21,7 +21,7 @@ class StrategicScenario
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Risk", "read:Workshop3", "read:StrategicScenario"])]
+    #[Groups(["read:Risk", "read:Workshop3", "read:StrategicScenario", "read:OperationalScenario"])]
     private $id;
 
     /**

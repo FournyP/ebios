@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=OperationalScenarioRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:OperationalScenario']],
+    denormalizationContext: ['groups' => ['write:OperationalScenario']]
+)]
 class OperationalScenario
 {
     /**
@@ -20,36 +23,41 @@ class OperationalScenario
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop4"])]
+    #[Groups(["read:Workshop4", "read:OperationalScenario", "read:ColumnAction"])]
     private $id;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:OperationalScenario", "write:OperationalScenario"])]
     private $overallLikelihood;
 
     /**
      * @ORM\OneToOne(targetEntity=StrategicScenario::class, inversedBy="operationalScenario", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:OperationalScenario", "write:OperationalScenario"])]
     private $strategicScenario;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop4::class, inversedBy="operationalScenarios")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:OperationalScenario", "write:OperationalScenario"])]
     private $workshop4;
 
     /**
      * @ORM\OneToMany(targetEntity=ColumnAction::class, mappedBy="operationalScenario", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:OperationalScenario"])]
     private $columnActions;
 
     /**
      * @ORM\ManyToMany(targetEntity=Measure::class, mappedBy="operationalScenario")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:OperationalScenario"])]
     private $measures;
 
     public function __construct()
