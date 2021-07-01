@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProjectRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -9,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ["read:Project"]],
+    itemOperations: ['get', 'delete']
+)]
 class Project
 {
     /**
@@ -17,53 +21,62 @@ class Project
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups("read:Project")]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups("read:Project")]
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups("read:Project")]
     private $organization;
 
     /**
      * @ORM\OneToOne(targetEntity=ProjectParameters::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $projectParameters;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop1::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $workshop1;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop2::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $workshop2;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop3::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $workshop3;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop4::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $workshop4;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop5::class, mappedBy="project", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Project")]
     private $workshop5;
 
     public function getId(): ?int

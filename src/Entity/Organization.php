@@ -13,7 +13,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Entity(repositoryClass=OrganizationRepository::class)
  */
 #[ApiResource(
-    normalizationContext: ['groups' => ["read:collection"]],
+    normalizationContext: ['groups' => ["read:Organization"]],
     itemOperations: ['get']
 )]
 class Organization
@@ -23,13 +23,14 @@ class Organization
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups("read:collection")]
+    #[Groups("read:Organization")]
+    #[Groups("read:Project")]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups("read:collection")]
+    #[Groups("read:Organization")]
     private $name;
 
     /**
