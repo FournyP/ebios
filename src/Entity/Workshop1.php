@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=Workshop1Repository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Workshop1']],
+    denormalizationContext: ['groups' => ['write:Workshop1']]
+)]
 class Workshop1
 {
     /**
@@ -20,30 +23,34 @@ class Workshop1
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Project"])]
+    #[Groups(["read:Project", "read:Workshop1"])]
     private $id;
 
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups("read:Workshop1", "write:Workshop1")]
     private $workshopContributors = [];
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, inversedBy="workshop1", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups("read:Workshop1", "write:Workshop1")]
     private $project;
 
     /**
      * @ORM\OneToMany(targetEntity=BusinessAsset::class, mappedBy="workshop1", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Workshop1")]
     private $businessAssets;
 
     /**
      * @ORM\OneToMany(targetEntity=SecurityBaseline::class, mappedBy="workshop1", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups("read:Workshop1")]
     private $securityBaselines;
 
     public function __construct()
