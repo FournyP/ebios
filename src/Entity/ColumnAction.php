@@ -24,7 +24,7 @@ class ColumnAction
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:OperationalScenario", "read:ColumnAction"])]
+    #[Groups(["read:OperationalScenario", "read:ColumnAction", "read:Action"])]
     private $id;
 
     /**

@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=ActionRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Action']],
+    denormalizationContext: ['groups' => ['write:Action']]
+)]
 class Action
 {
     /**
@@ -20,28 +23,32 @@ class Action
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:ColumnAction"])]
+    #[Groups(["read:ColumnAction", "read:Action"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Action", "write:Action"])]
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity=ColumnAction::class, inversedBy="actions")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:Action", "write:Action"])]
     private $columnAction;
 
     /**
      * @ORM\ManyToMany(targetEntity=Action::class, inversedBy="followingActions")
      */
+    #[Groups(["read:Action", "write:Action"])]
     private $antecedentAction;
 
     /**
      * @ORM\ManyToMany(targetEntity=Action::class, mappedBy="antecedentAction")
      */
+    #[Groups(["read:Action", "write:Action"])]
     private $followingActions;
 
     public function __construct()
