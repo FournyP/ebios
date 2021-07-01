@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=StakeHolderCategoryRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:StakeHolderCategory']],
+    denormalizationContext: ['groups' => ['write:StakeHolderCategory']]
+)]
 class StakeHolderCategory
 {
     /**
@@ -20,24 +23,27 @@ class StakeHolderCategory
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop3"])]
+    #[Groups(["read:Workshop3", "read:StakeHolderCategory"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:StakeHolderCategory", "write:StakeHolderCategory"])]
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop3::class, inversedBy="stakeHolderCategories")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:StakeHolderCategory", "write:StakeHolderCategory"])]
     private $workshop3;
 
     /**
      * @ORM\OneToMany(targetEntity=StakeHolder::class, mappedBy="stakeHolderCategory", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:StakeHolderCategory"])]
     private $stakeHolders;
 
     public function __construct()
