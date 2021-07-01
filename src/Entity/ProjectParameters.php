@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProjectParametersRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -9,7 +10,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=ProjectParametersRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:ProjectParameters']],
+    denormalizationContext: ['groups' => ['write:ProjectParameters']],
+    itemOperations: ['get', 'delete']
+)]
 class ProjectParameters
 {
     /**
@@ -17,17 +22,20 @@ class ProjectParameters
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(["read:ProjectParameters"])]
     private $id;
 
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(["read:ProjectParameters", "write:ProjectParameters"])]
     private $workshopsDefined = [];
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, inversedBy="projectParameters", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:ProjectParameters", "write:ProjectParameters"])]
     private $project;
 
     public function getId(): ?int
