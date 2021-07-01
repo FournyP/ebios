@@ -10,7 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=StrategicScenarioRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:StrategicScenario']],
+    denormalizationContext: ['groups' => ['write:StrategicScenario']]
+)]
 class StrategicScenario
 {
     /**
@@ -18,40 +21,46 @@ class StrategicScenario
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Risk", "read:Workshop3"])]
+    #[Groups(["read:Risk", "read:Workshop3", "read:StrategicScenario"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
     private $name;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
     private $strategy;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
     private $severity;
 
     /**
      * @ORM\ManyToOne(targetEntity=Risk::class, inversedBy="strategicScenarios")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
     private $risk;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop3::class, inversedBy="strategicScenarios")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
     private $workshop3;
 
     /**
      * @ORM\OneToOne(targetEntity=OperationalScenario::class, mappedBy="strategicScenario", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:StrategicScenario"])]
     private $operationalScenario;
 
     public function getId(): ?int
