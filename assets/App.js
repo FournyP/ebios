@@ -7,8 +7,6 @@ import Signup from "./components/Signup";
 import Project from "./components/Project";
 import CreateProject from "./components/CreateProject";
 
-process.env.API_URL = "http://127.0.0.1:8000/";
-
 function App() {
   return (
     <div className="App">
