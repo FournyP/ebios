@@ -34,7 +34,10 @@ const useStyles = makeStyles((theme) => ({
 function Workshop2() {
     const classes = useStyles()
     const [inputFields, setInputFields] = useState([
-        { id: uuidv4(), firstName: '', lastName: '' },
+        {
+            id: uuidv4(), sourceRisk: '', objectif: '', motivation: '+',
+            ressource: '+', activity: '+', pertinence: 1
+        },
     ]);
 
     const handleSubmit = (e) => {
@@ -54,7 +57,10 @@ function Workshop2() {
     }
 
     const handleAddFields = () => {
-        setInputFields([...inputFields, { id: uuidv4(), firstName: '', lastName: '' }])
+        setInputFields([...inputFields, {
+            id: uuidv4(), sourceRisk: '', objectif: '', motivation: '+',
+            ressource: '+', activity: '+', pertinence: 1
+        }])
     }
 
     const handleRemoveFields = id => {
@@ -68,25 +74,27 @@ function Workshop2() {
                 {inputFields.map(inputField => (
                     <div key={inputField.id}>
                         <TextField
-                            name="firstName"
+                            name="sourceRisk"
                             label="Source de risque"
                             variant="filled"
-                            value={inputField.firstName}
+                            value={inputField.sourceRisk}
                             onChange={event => handleChangeInput(inputField.id, event)}
                         />
                         <TextField
-                            name="lastName"
+                            name="objectif"
                             label="Objectif Visé"
                             variant="filled"
                             multiline
-                            value={inputField.lastName}
+                            value={inputField.objectif}
                             onChange={event => handleChangeInput(inputField.id, event)}
                         />
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">Motivation</InputLabel>
+                            <InputLabel id="motivation-select">Motivation</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                id="motivation-select"
+                                name="motivation"
+                                defaultValue={'+'}
+                                onClick={event => handleChangeInput(inputField.id, event)}
                             >
                                 <MenuItem value={'+'}>+</MenuItem>
                                 <MenuItem value={'++'}>++</MenuItem>
@@ -94,10 +102,11 @@ function Workshop2() {
                             </Select>
                         </FormControl>
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">Ressources</InputLabel>
+                            <InputLabel>Ressources</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                name="ressource"
+                                defaultValue={'+'}
+                                onClick={event => handleChangeInput(inputField.id, event)}
                             >
                                 <MenuItem value={'+'}>+</MenuItem>
                                 <MenuItem value={'++'}>++</MenuItem>
@@ -105,10 +114,11 @@ function Workshop2() {
                             </Select>
                         </FormControl>
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">Activité</InputLabel>
+                            <InputLabel>Activité</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                name="activity"
+                                defaultValue={'+'}
+                                onClick={event => handleChangeInput(inputField.id, event)}
                             >
                                 <MenuItem value={'+'}>+</MenuItem>
                                 <MenuItem value={'++'}>++</MenuItem>
@@ -116,14 +126,15 @@ function Workshop2() {
                             </Select>
                         </FormControl>
                         <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">Pertinence</InputLabel>
+                            <InputLabel>Pertinence</InputLabel>
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                name="pertinence"
+                                defaultValue={1}
+                                onClick={event => handleChangeInput(inputField.id, event)}
                             >
-                                <MenuItem value={'faible'} className={classes.faibleMenu}>Faible</MenuItem>
-                                <MenuItem value={'moyenne'}>Moyenne</MenuItem>
-                                <MenuItem value={'élevée'}>Élevée</MenuItem>
+                                <MenuItem value={1} className={classes.faibleMenu}>Faible</MenuItem>
+                                <MenuItem value={2}>Moyenne</MenuItem>
+                                <MenuItem value={3}>Élevée</MenuItem>
                             </Select>
                         </FormControl>
 
@@ -144,7 +155,7 @@ function Workshop2() {
                     onClick={handleSubmit}
                 >Send</Button>
             </form>
-        </Container>
+        </Container >
     );
 }
 
