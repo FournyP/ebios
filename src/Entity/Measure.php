@@ -20,7 +20,7 @@ class Measure
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:OperationalScenario"])]
+    #[Groups(["read:OperationalScenario", "read:Workshop5"])]
     private $id;
 
     /**
