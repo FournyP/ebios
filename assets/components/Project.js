@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-
+import Container from '@material-ui/core/Container';
 import WorkShop1 from './workshops/workshop1';
 import WorkShop2 from './workshops/workshop2';
 import WorkShop3 from './workshops/workshop3';
@@ -26,7 +26,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box p={3}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
