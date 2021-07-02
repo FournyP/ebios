@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use App\Entity\User;
 
 class SecurityController extends AbstractController
@@ -31,7 +32,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: "/api/register", name: "api_register", methods: ['POST'])]
-    public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager): Response 
+    public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager, UserRepository $userRepository): Response 
     {
         if ($this->getUser() === null) 
         {
@@ -43,20 +44,24 @@ class SecurityController extends AbstractController
 
             if ($email != null && $password != null)
             {
-                $user->setEmail($email)
+                $userFound = $userRepository->findByEmail($email);
+
+                if ($userFound === null) 
+                {
+                    $user->setEmail($email)
                     ->setPassword($hasher->hashPassword($user, $password));
 
-                $validation = $validator->validate($user);
+                    $validation = $validator->validate($user);
 
-                if ($validation->count() == 0)
-                {
-                    $entityManager->persist($user);
-                    $entityManager->flush();
+                    if ($validation->count() == 0) {
+                        $entityManager->persist($user);
+                        $entityManager->flush();
 
-                    return new Response('', 201);
+                        return new Response('', 201);
+                    }
+
+                    return $this->json($validation, 400);
                 }
-
-                return $this->json($validation, 400);
             }
         }
 
