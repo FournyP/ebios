@@ -48,8 +48,6 @@ class SecurityController extends AbstractController
 
                 $validation = $validator->validate($user);
 
-                dd($validation);
-
                 if ($validation->count() == 0)
                 {
                     $entityManager->persist($user);
