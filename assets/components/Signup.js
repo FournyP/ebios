@@ -13,19 +13,19 @@ import logo from './logo.png';
 import Alert from '@material-ui/lab/Alert';
 import { useHistory } from "react-router-dom";
 
-
-
 async function registerUser(credentials) {
-    console.log(JSON.stringify(credentials))
-    return fetch('https://127.0.0.1:8000/api/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    }).then(response => {
+
+    const request = new Request(process.env.API_URL + "api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials)
+    });
+
+    return fetch(request).then(response => {
         if (!response.ok) { console.log(response); throw response.status }
-    })
+    });
 }
 
 const useStyles = makeStyles((theme) => ({

@@ -14,13 +14,16 @@ import { useHistory } from "react-router-dom";
 import Alert from '@material-ui/lab/Alert';
 
 async function loginUser(credentials) {
-    return fetch('https://127.0.0.1:8000/api/login', {
-        method: 'POST',
+
+    const request = new Request(process.env.API_URL + "api/login", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials)
-    })
+        body: JSON.stringify(credentials),
+    });
+
+    return fetch(request)
         .then(response => {
             if (!response.ok) { throw 'Incorrect Password or Username' }
             return response.json()  //we only get here if there is no error
