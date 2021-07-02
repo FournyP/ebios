@@ -23,7 +23,7 @@ class OperationalScenario
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Workshop4", "read:OperationalScenario", "read:ColumnAction"])]
+    #[Groups(["read:Workshop4", "read:OperationalScenario", "read:ColumnAction", "read:Measure"])]
     private $id;
 
     /**

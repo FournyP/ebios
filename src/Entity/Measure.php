@@ -12,7 +12,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=MeasureRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:Measure']],
+    denormalizationContext: ['groups' => ['write:Measure']]
+)]
 class Measure
 {
     /**
@@ -20,53 +23,62 @@ class Measure
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:OperationalScenario", "read:Workshop5"])]
+    #[Groups(["read:OperationalScenario", "read:Workshop5", "read:Measure"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $label;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $type;
 
     /**
      * @ORM\Column(type="dateinterval")
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $deadline;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $status;
 
     /**
      * @ORM\Column(type="smallint")
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $complexity;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $difficulty;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $manager;
 
     /**
      * @ORM\ManyToOne(targetEntity=Workshop5::class, inversedBy="measures")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $workshop5;
 
     /**
      * @ORM\ManyToMany(targetEntity=OperationalScenario::class, inversedBy="measures")
      */
+    #[Groups(["read:Measure", "write:Measure"])]
     private $operationalScenario;
 
     public function __construct()
