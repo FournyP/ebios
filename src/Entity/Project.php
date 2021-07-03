@@ -32,18 +32,17 @@ class Project
     private $name;
 
     /**
+     * @ORM\Column(type="json")
+     */
+    #[Groups(["read:Project", "write:Project"])]
+    private $workshopsDefined = [];
+
+    /**
      * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
      * @ORM\JoinColumn(nullable=false)
      */
     #[Groups(["read:Project", "write:Project"])]
     private $organization;
-
-    /**
-     * @ORM\OneToOne(targetEntity=ProjectParameters::class, mappedBy="project", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    #[Groups(["read:Project"])]
-    private $projectParameters;
 
     /**
      * @ORM\OneToOne(targetEntity=Workshop1::class, mappedBy="project", cascade={"persist", "remove"})
@@ -97,6 +96,18 @@ class Project
         return $this;
     }
 
+    public function getWorkshopsDefined(): ?array
+    {
+        return $this->workshopsDefined;
+    }
+
+    public function setWorkshopsDefined(array $workshopsDefined): self
+    {
+        $this->workshopsDefined = $workshopsDefined;
+
+        return $this;
+    }
+
     public function getOrganization(): ?Organization
     {
         return $this->organization;
@@ -105,23 +116,6 @@ class Project
     public function setOrganization(?Organization $organization): self
     {
         $this->organization = $organization;
-
-        return $this;
-    }
-
-    public function getProjectParameters(): ?ProjectParameters
-    {
-        return $this->projectParameters;
-    }
-
-    public function setProjectParameters(ProjectParameters $projectParameters): self
-    {
-        // set the owning side of the relation if necessary
-        if ($projectParameters->getProject() !== $this) {
-            $projectParameters->setProject($this);
-        }
-
-        $this->projectParameters = $projectParameters;
 
         return $this;
     }
