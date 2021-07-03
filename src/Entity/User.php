@@ -47,19 +47,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups('read:User')]
+    #[Groups(["read:User", "read:Organization"])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    #[Groups('read:User')]
+    #[Groups("read:User")]
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[Groups('read:User')]
+    #[Groups("read:User")]
     private $roles = [];
 
     /**

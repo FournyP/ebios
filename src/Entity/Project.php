@@ -22,7 +22,16 @@ class Project
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(["read:Project", "read:ProjectParameters", "read:Workshop1", "read:Workshop2"])]
+    #[Groups([
+        "read:Project", 
+        "read:Organization", 
+        "read:ProjectParameters", 
+        "read:Workshop1", 
+        "read:Workshop2", 
+        "read:Workshop3", 
+        "read:Workshop4", 
+        "read:Workshop5"
+    ])]
     private $id;
 
     /**

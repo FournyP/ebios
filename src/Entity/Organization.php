@@ -14,6 +14,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  */
 #[ApiResource(
     normalizationContext: ['groups' => ["read:Organization"]],
+    denormalizationContext: ['groups' => ["write:Organization"]],
     itemOperations: ['get']
 )]
 class Organization
@@ -29,18 +30,20 @@ class Organization
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups("read:Organization")]
+    #[Groups(["read:Organization", "write:Organization"])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="organizations")
      */
+    #[Groups(["read:Organization", "write:Organization"])]
     private $users;
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="organization", orphanRemoval=true)
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
+    #[Groups(["read:Organization"])]
     private $projects;
 
     public function __construct()
