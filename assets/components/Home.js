@@ -11,18 +11,26 @@ function Home() {
     <div>
       <Appbar />
       <h1>EBIOS HOME PAGE</h1>
-      {isLogged ?
+      {isLogged ? (
         <Container maxWidth="md">
-          <Alert severity='info'>
-            Connecté : {localStorage.getItem('username')} &&
-            Roles : {localStorage.getItem('roles')}
+          <Alert severity="info">
+            Connecté : {localStorage.getItem("username")} && Roles :{" "}
+            {localStorage.getItem("roles")}
           </Alert>
-          <Button component={Link} color="inherit" to="/createproject">Créer un projet</Button>
-          <Button component={Link} color="inherit" to="/project">Accéder à mes projets</Button>
+          <Button component={Link} color="inherit" to="/createorganization">
+            Créer une organization
+          </Button>
+          <Button component={Link} color="inherit" to="/createproject">
+            Créer un projet
+          </Button>
+          <Button component={Link} color="inherit" to="/project">
+            Accéder à mes projets
+          </Button>
         </Container>
-        : <></>
-      }
-    </div >
+      ) : (
+        <></>
+      )}
+    </div>
   );
 }
 
