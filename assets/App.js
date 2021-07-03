@@ -6,6 +6,7 @@ import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import Project from "./components/Project";
 import CreateProject from "./components/CreateProject";
+import CreateOrganization from "./components/CreateOrganization";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route exact from="/Signup" component={Signup} />
           <Route exact from="/Project" component={Project} />
           <Route exact from="/CreateProject" component={CreateProject} />
+          <Route exact from="/CreateOrganization" component={CreateOrganization} />
         </Switch>
       </Router>
     </div>
