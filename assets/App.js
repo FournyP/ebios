@@ -13,12 +13,24 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact from="/" component={Home} />
-          <Route exact from="/Signin" component={Signin} />
-          <Route exact from="/Signup" component={Signup} />
-          <Route exact from="/Project" component={Project} />
-          <Route exact from="/CreateProject" component={CreateProject} />
-          <Route exact from="/CreateOrganization" component={CreateOrganization} />
+          <Route exact from="/">
+            <Home />
+          </Route>
+          <Route exact from="/Signin">
+            <Signin />
+          </Route>
+          <Route exact from="/Signup">
+            <Signup />
+          </Route>
+          <Route exact from="/Project">
+            <Project />
+          </Route>
+          <Route exact from="/CreateProject">
+            <CreateProject />
+          </Route>
+          <Route exact from="/CreateOrganization">
+            <CreateOrganization />
+          </Route>
         </Switch>
       </Router>
     </div>
