@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Appbar from "./Appbar";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -12,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function handleSubmit(parameters) {
+async function createOrganization(parameters) {
   const request = new Request(process.env.API_URL + "api/organizations", {
     method: "POST",
     headers: {
@@ -31,6 +33,26 @@ async function handleSubmit(parameters) {
 
 function CreateOrganization() {
   const classes = useStyles();
+
+  const history = useHistory();
+  const [name, setName] = useState();
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createOrganization({
+        name
+      });
+      history.push("/");
+    } catch (e) {
+      console.log(e);
+      setAlert(true);
+      setAlertMsg(e);
+    }
+  };
+
   return (
     <div className={classes.bg}>
       <Appbar />
@@ -46,8 +68,10 @@ function CreateOrganization() {
             label="Nom de l'organization"
             name="name"
             autoFocus
+            onChange={(e) => setName(e.target.value)}
           />
-          <Button variant="contained" color="primary">
+          {alert ? <Alert severity="error">{alertMsg}</Alert> : <></>}
+          <Button type="submit" variant="contained" color="primary">
             Créer l'organization
           </Button>
         </form>
