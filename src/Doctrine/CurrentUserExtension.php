@@ -119,8 +119,10 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
 
     private function addWhereForUser(QueryBuilder $queryBuilder, string $alias, int $userId) 
     {
-        $queryBuilder->andWhere("$alias.user IN (:ids)")
-            ->setParameter('ids', [$userId]);
+        $queryBuilder
+            ->join("$alias.users", "user")
+            ->andWhere("user.id = :id")
+            ->setParameter('id', $userId);
     }
 
     private function addWhereForOrganization(QueryBuilder $queryBuilder, string $alias, int $userId) 
