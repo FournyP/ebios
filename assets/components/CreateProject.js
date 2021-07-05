@@ -1,18 +1,28 @@
 import React from "react";
 import Appbar from "./Appbar";
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
+import {
+  Container,
+  TextField,
+  FormControl,
+  MenuItem,
+  Select,
+  CircularProgress,
+  Button,
+  InputLabel,
+  makeStyles,
+} from "@material-ui/core";
+import { Autocomplete, Alert } from "@material-ui/lab";
 import Tableau from "../resources/Tableau-Create-Project.png";
-import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 
-async function initOptions() {
+const useStyles = makeStyles((theme) => ({
+  table: {
+    maxWidth: 600,
+    marginTop: theme.spacing(1),
+  },
+}));
+
+async function fetchOptions() {
   let request = new Request(process.env.API_URL + "api/organizations", {
     method: "GET",
     headers: {
@@ -23,7 +33,7 @@ async function initOptions() {
   return await (await fetch(request)).json();
 }
 
-async function handleSubmit(parameters) {
+async function createProject(parameters) {
   const request = new Request(process.env.API_URL + "api/projects", {
     method: "POST",
     headers: {
@@ -41,36 +51,59 @@ async function handleSubmit(parameters) {
 }
 
 const CreateProject = () => {
-  const classes = makeStyles((theme) => ({
-    table: {
-      maxWidth: 600,
-      marginTop: theme.spacing(1),
-    },
-  }))();
+  const history = useHistory();
+  const classes = useStyles();
 
+  const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;
 
-  React.useEffect(async() => {
+  const [organization, setOrganization] = React.useState(null);
+  const [name, setName] = React.useState(null);
+  const [workshopsDefined, setWorkshopDefined] = React.useState(null);
+
+  const [alert, setAlert] = React.useState(false);
+  const [alertMsg, setAlertMsg] = React.useState("");
+
+  React.useEffect(async () => {
     let active = true;
 
     if (!loading) {
       return undefined;
     }
 
-    let options = await initOptions();
+    let response = await fetchOptions();
 
     if (active) {
-      for(option in options["hydra:member"])
-      {
-        setOptions(option.name);
-      }
+      setOptions(response["hydra:member"]);
     }
 
     return () => {
       active = false;
     };
   }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await createProject({
+        organization,
+        name,
+        workshopsDefined,
+      });
+      history.push("/");
+    } catch (e) {
+      console.log(e);
+      setAlert(true);
+      setAlertMsg(e);
+    }
+  };
 
   return (
     <div className={classes.bg}>
@@ -79,10 +112,8 @@ const CreateProject = () => {
         <h1>Créer un nouveau projet</h1>
         <form onSubmit={handleSubmit}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id="organization"> Organization </InputLabel>
             <Autocomplete
               id="organization"
-              style={{ width: 300 }}
               open={open}
               onOpen={() => {
                 setOpen(true);
@@ -95,6 +126,7 @@ const CreateProject = () => {
               options={options}
               loading={loading}
               fullWidth
+              onChange={(e, value) => setOrganization(value["@id"])}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -125,6 +157,7 @@ const CreateProject = () => {
             label="Nom du projet"
             name="name"
             autoFocus
+            onChange={(e) => setName(e.target.value)}
           />
           <FormControl variant="outlined" fullWidth>
             <InputLabel id="workshopsDefined"> Scenario </InputLabel>
@@ -135,47 +168,53 @@ const CreateProject = () => {
               fullWidth
               name="workshopsDefined"
               required
+              onChange={(e, child) => setWorkshopDefined(child.props.value.split(', '))}
             >
-              <MenuItem value={[1]}>
+              <MenuItem value={"1"}>
                 Identifier le socle de sécurité adapté à l’objet de l’étude
               </MenuItem>
-              <MenuItem value={[1, 5]}>
+              <MenuItem value={"1, 5"}>
                 Être en conformité avec les référentiels de sécurité numérique
               </MenuItem>
-              <MenuItem value={[3]}>
+              <MenuItem value={"3"}>
                 Évaluer le niveau de menace de l’écosystème vis-à-vis de l’objet
                 de l’étude
               </MenuItem>
-              <MenuItem value={[2, 3]}>
+              <MenuItem value={"2, 3"}>
                 Identifier et analyser les scénarios de haut niveau, intégrant
                 l’écosystème
               </MenuItem>
-              <MenuItem value={[1, 2, 3, 5]}>
+              <MenuItem value={"1, 2, 3, 5"}>
                 Réaliser une étude préliminaire de risque pour identifier les
                 axes prioritaires d’amélioration de la sécurité
               </MenuItem>
-              <MenuItem value={[1, 2, 3, 4, 5]}>
+              <MenuItem value={"1, 2, 3, 4, 5"}>
                 Conduire une étude de risque complète et fine, par exemple sur
                 un produit de sécurité ou en vue de l’homologation d’un système
               </MenuItem>
-              <MenuItem value={[3, 4]}>
+              <MenuItem value={"3, 4"}>
                 Orienter un audit de sécurité et notamment un test d’intrusion
               </MenuItem>
-              <MenuItem value={[3, 4]}>
+              <MenuItem value={"3, 4"}>
                 Orienter les dispositifs de détection et de réaction, par
                 exemple au niveau d’un centre opérationnel de la sécurité (SOC){" "}
               </MenuItem>
             </Select>
-          </FormControl>
+          </FormControl>{" "}
+          <Container component="main">
+            <img
+              className={classes.table}
+              src={Tableau}
+              alt="Tableau"
+              fullWidth
+            />
+          </Container>
+          <Button type="submit" variant="contained" color="primary">
+            Créer le projet
+          </Button>
+          {alert ? <Alert severity="error">{alertMsg}</Alert> : <></>}
         </form>
       </Container>
-      <Container component="main">
-        <img className={classes.table} src={Tableau} alt="Tableau" fullWidth />
-      </Container>
-
-      <Button variant="contained" color="primary">
-        Créer le projet
-      </Button>
     </div>
   );
 };
