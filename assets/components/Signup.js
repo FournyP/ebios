@@ -16,11 +16,11 @@ import { useHistory } from "react-router-dom";
 async function registerUser(credentials) {
 
     const request = new Request(process.env.API_URL + "api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials)
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials)
     });
 
     return fetch(request).then(response => {
@@ -66,7 +66,12 @@ export default function SignUp() {
             history.push("/");
         } catch (e) {
             setAlert(true);
-            setAlertMsg(e);
+            if (e == 400) {
+                setAlertMsg("Email déjà utilisé");
+            }
+            if (e == 401 || e == 500) {
+                setAlertMsg("Une erreur est survenue");
+            }
         }
     }
     return (
