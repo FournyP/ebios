@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     formControl: {
-        margin: theme.spacing(2),
+        margin: theme.spacing(1),
         minWidth: "18%",
     },
     texField: {
@@ -69,10 +69,10 @@ function Workshop4() {
                 <Box className={classes.texField}
                     borderRight={1}
                     borderColor="grey.500">
-                    <h2>Scénarios opérationnels</h2>
+                    <h3>Scénarios opérationnels</h3>
                 </Box>
                 <Box className={classes.formControl}>
-                    <h2>Vraisemblance</h2>
+                    <h3>Vraisemblance</h3>
                 </Box>
             </Box>
 

@@ -23,9 +23,18 @@ async function registerUser(credentials) {
         body: JSON.stringify(credentials)
     });
 
-    return fetch(request).then(response => {
-        if (!response.ok) { console.log(response); throw response.status }
-    });
+    return fetch(request)
+        .then(response => {
+            if (!response.ok) {
+                return response.json();
+            }
+        })
+        .then(data => {
+            if (data) {
+                throw data.error_message
+            }
+        })
+
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -66,12 +75,7 @@ export default function SignUp() {
             history.push("/");
         } catch (e) {
             setAlert(true);
-            if (e == 400) {
-                setAlertMsg("Email déjà utilisé");
-            }
-            if (e == 401 || e == 500) {
-                setAlertMsg("Une erreur est survenue");
-            }
+            setAlertMsg(e);
         }
     }
     return (
