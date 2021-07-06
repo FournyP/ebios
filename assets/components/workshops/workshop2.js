@@ -96,6 +96,14 @@ function Workshop2() {
                     <h3>Pertinence</h3>
                 </Box>
             </Box >
+            {/* Array(): 
+            {activity: "++" 
+            id: "aa1a384e-77ec-4c86-8570-27c8f721fe22" 
+            motivation: "++"objectif: "Saboter la camp..."
+            pertinence: 2
+            ressource: "+"
+            sourceRisk: "Hacktiviste"}
+            {...}*/}
             <form className={classes.root} onSubmit={handleSubmit}>
                 {inputFields.map(inputField => (
                     <Box key={inputField.id}
