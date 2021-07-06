@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { 
+import {
   AppBar,
   Toolbar,
   Typography,
@@ -7,7 +7,8 @@ import {
   Menu,
   MenuItem,
   IconButton,
-  makeStyles } from "@material-ui/core";
+  makeStyles,
+} from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
@@ -44,7 +45,7 @@ function Appbar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("roles");
@@ -52,7 +53,7 @@ function Appbar() {
     window.location.reload();
     handleMenuClose();
   };
-  
+
   function handleClick() {
     history.push("/");
   }
@@ -68,7 +69,28 @@ function Appbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      {isLogged ? (
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      ) : (
+        <>
+          <MenuItem
+            color="inherit"
+            component={Link}
+            to="/signup"
+            onClick={handleMenuClose}
+          >
+            Signup
+          </MenuItem>
+          <MenuItem
+            color="inherit"
+            component={Link}
+            to="/signin"
+            onClick={handleMenuClose}
+          >
+            Login
+          </MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -80,27 +102,16 @@ function Appbar() {
             EBIOS Risk Manager
           </Typography>
           <div className={classes.sectionDesktop}>
-            {isLogged ? (
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircleIcon />
-              </IconButton>
-            ) : (
-              <>
-                <Button color="inherit" component={Link} to="/signup">
-                  Signup
-                </Button>
-                <Button color="inherit" component={Link} to="/signin">
-                  Login
-                </Button>
-              </>
-            )}
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircleIcon />
+            </IconButton>
           </div>
         </Toolbar>
       </AppBar>
