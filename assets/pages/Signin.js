@@ -1,4 +1,4 @@
-import Appbar from "./Appbar";
+import Appbar from "../components/Appbar";
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,32 +9,29 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import logo from './logo.png';
-import Alert from '@material-ui/lab/Alert';
+import logo from '../resources/logo.png';
 import { useHistory } from "react-router-dom";
+import Alert from '@material-ui/lab/Alert';
 
-async function registerUser(credentials) {
+async function loginUser(credentials) {
 
-    const request = new Request(process.env.API_URL + "api/register", {
+    const request = new Request(process.env.API_URL + "api/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify(credentials),
     });
 
     return fetch(request)
         .then(response => {
-            if (!response.ok) {
-                return response.json();
-            }
+            if (!response.ok) { throw 'Incorrect Password or Username' }
+            return response.json()  //we only get here if there is no error
         })
-        .then(data => {
-            if (data) {
-                throw data.error_message
-            }
+        .then(json => {
+            localStorage.setItem('username', JSON.stringify(json.username));
+            localStorage.setItem('roles', JSON.stringify(json.roles));
         })
-
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -48,16 +45,17 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         width: 125,
     },
+    submit: {
+        marginTop: theme.spacing(1),
+    },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
+        marginTop: theme.spacing(1),
+    }
 }));
 
-export default function SignUp() {
+
+function Signin() {
     const history = useHistory();
     const classes = useStyles();
     const [username, setUserName] = useState();
@@ -68,16 +66,18 @@ export default function SignUp() {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            await registerUser({
+            await loginUser({
                 username,
                 password
             });
             history.push("/");
         } catch (e) {
+            console.log(e);
             setAlert(true);
             setAlertMsg(e);
         }
     }
+
     return (
         <div>
             <Appbar />
@@ -86,39 +86,34 @@ export default function SignUp() {
                 <div className={classes.paper}>
                     <img className={classes.avatar} src={logo} alt="Logo" />
                     <form className={classes.form} onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="username"
-                                    label="Email Address"
-                                    name="username"
-                                    autoComplete="username"
-                                    onChange={e => setUserName(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    onChange={e => setPassword(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I agree to our Terms"
-                                />
-                            </Grid>
-                        </Grid>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            onChange={e => setUserName(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label="Remember me"
+                        />
                         {alert ? <Alert severity='error'>{alertMsg}</Alert> : <></>}
                         <Button
                             type="submit"
@@ -127,18 +122,20 @@ export default function SignUp() {
                             color="primary"
                             className={classes.submit}
                         >
-                            Sign Up
+                            Sign In
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link href="/signin" variant="body2">
-                                    Already have an account? Sign in
+                                <Link href="/signup" variant="body2">
+                                    {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
                         </Grid>
                     </form>
                 </div>
             </Container>
-        </div >
+        </div>
     );
 }
+
+export default Signin;

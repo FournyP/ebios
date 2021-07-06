@@ -1,6 +1,6 @@
 import React from "react";
-import Appbar from "./Appbar";
-import Table from "./Table";
+import Appbar from "../components/Appbar";
+import Table from "../components/Table";
 import Alert from "@material-ui/lab/Alert";
 import {
   Button,
