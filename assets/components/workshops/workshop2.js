@@ -3,13 +3,14 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/RemoveCircle';
+import AddIcon from '@material-ui/icons/AddCircle';
 import { v4 as uuidv4 } from 'uuid';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import Box from '@material-ui/core/Box';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,10 +25,15 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 130,
+        width: "10%",
     },
-    faibleMenu: {
-        color: "blue",
+    textField: {
+        margin: theme.spacing(1),
+        width: "20%",
+    },
+    header: {
+        background: '#6d2a69',
+        color: "white"
     }
 }))
 
@@ -70,25 +76,49 @@ function Workshop2() {
     }
     return (
         <Container>
+            <Box display="flex" alignItems="center" className={classes.header}>
+                <Box className={classes.textField}>
+                    <h3>Sources de risques</h3>
+                </Box>
+                <Box className={classes.textField}>
+                    <h3>Objectif Visé</h3>
+                </Box>
+                <Box className={classes.formControl}>
+                    <h3>Motivation</h3>
+                </Box>
+                <Box className={classes.formControl}>
+                    <h3>Ressource</h3>
+                </Box>
+                <Box className={classes.formControl}>
+                    <h3>Activité</h3>
+                </Box>
+                <Box className={classes.formControl}>
+                    <h3>Pertinence</h3>
+                </Box>
+            </Box >
             <form className={classes.root} onSubmit={handleSubmit}>
                 {inputFields.map(inputField => (
-                    <div key={inputField.id}>
+                    <Box key={inputField.id}
+                        display="flex"
+                        alignItems="center"
+                        borderTop={1}
+                        borderColor="grey.500">
                         <TextField
+                            className={classes.textField}
                             name="sourceRisk"
                             label="Source de risque"
-                            variant="filled"
                             value={inputField.sourceRisk}
                             onChange={event => handleChangeInput(inputField.id, event)}
                         />
                         <TextField
+                            className={classes.textField}
                             name="objectif"
                             label="Objectif Visé"
-                            variant="filled"
                             multiline
                             value={inputField.objectif}
                             onChange={event => handleChangeInput(inputField.id, event)}
                         />
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <InputLabel id="motivation-select">Motivation</InputLabel>
                             <Select
                                 id="motivation-select"
@@ -101,7 +131,7 @@ function Workshop2() {
                                 <MenuItem value={'+++'}>+++</MenuItem>
                             </Select>
                         </FormControl>
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <InputLabel>Ressources</InputLabel>
                             <Select
                                 name="ressource"
@@ -113,7 +143,7 @@ function Workshop2() {
                                 <MenuItem value={'+++'}>+++</MenuItem>
                             </Select>
                         </FormControl>
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <InputLabel>Activité</InputLabel>
                             <Select
                                 name="activity"
@@ -125,14 +155,14 @@ function Workshop2() {
                                 <MenuItem value={'+++'}>+++</MenuItem>
                             </Select>
                         </FormControl>
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <InputLabel>Pertinence</InputLabel>
                             <Select
                                 name="pertinence"
                                 defaultValue={1}
                                 onClick={event => handleChangeInput(inputField.id, event)}
                             >
-                                <MenuItem value={1} className={classes.faibleMenu}>Faible</MenuItem>
+                                <MenuItem value={1}>Faible</MenuItem>
                                 <MenuItem value={2}>Moyenne</MenuItem>
                                 <MenuItem value={3}>Élevée</MenuItem>
                             </Select>
@@ -145,7 +175,7 @@ function Workshop2() {
                         <IconButton onClick={handleAddFields}>
                             <AddIcon />
                         </IconButton>
-                    </div>
+                    </Box>
                 ))}
                 <Button
                     className={classes.button}
