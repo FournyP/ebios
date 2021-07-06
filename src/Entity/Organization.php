@@ -30,7 +30,7 @@ class Organization
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:Organization", "write:Organization"])]
+    #[Groups(["read:Organization", "write:Organization", "read:Project"])]
     private $name;
 
     /**
