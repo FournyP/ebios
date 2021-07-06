@@ -67,7 +67,7 @@ class SecurityController extends AbstractController
 
                 return $this->json([
                     'error_message' => "User already exist"
-                ]);
+                ], 401);
             }
         }
 
