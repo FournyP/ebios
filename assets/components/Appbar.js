@@ -72,7 +72,7 @@ function Appbar() {
       {isLogged ? (
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       ) : (
-        <>
+        <div>
           <MenuItem
             color="inherit"
             component={Link}
@@ -89,7 +89,7 @@ function Appbar() {
           >
             Login
           </MenuItem>
-        </>
+        </div>
       )}
     </Menu>
   );
