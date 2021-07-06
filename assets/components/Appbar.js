@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Button from "@material-ui/core/Button";
-import { Link } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
-
+import { 
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Menu,
+  MenuItem,
+  IconButton,
+  makeStyles } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,39 +29,83 @@ const useStyles = makeStyles((theme) => ({
 function Appbar() {
   const history = useHistory();
   const classes = useStyles();
-  const [isLogged, setIsLogged] = useState(localStorage.getItem('username') ? true : false);
+  const [isLogged, setIsLogged] = useState(
+    localStorage.getItem("username") ? true : false
+  );
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  
   const handleLogout = () => {
-    localStorage.removeItem("username")
-    localStorage.removeItem("roles")
-    setIsLogged(false)
+    localStorage.removeItem("username");
+    localStorage.removeItem("roles");
+    setIsLogged(false);
     window.location.reload();
-  }
+    handleMenuClose();
+  };
+  
   function handleClick() {
     history.push("/");
   }
+
+  const menuId = "primary-search-account-menu";
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+    </Menu>
+  );
 
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.background}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} onClick={handleClick} >
+          <Typography className={classes.title} onClick={handleClick}>
             EBIOS Risk Manager
           </Typography>
-          <div>
-            <Button color="inherit" component={Link} to="/signup">Signup</Button>
-
-            {isLogged ?
-              <Button color="inherit" onClick={handleLogout}>Logout</Button>
-              :
-              <Button color="inherit" component={Link} to="/signin">Login</Button>
-            }
+          <div className={classes.sectionDesktop}>
+            {isLogged ? (
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircleIcon />
+              </IconButton>
+            ) : (
+              <>
+                <Button color="inherit" component={Link} to="/signup">
+                  Signup
+                </Button>
+                <Button color="inherit" component={Link} to="/signin">
+                  Login
+                </Button>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>
-    </div >
+      {renderMenu}
+    </div>
   );
 }
 export default Appbar;
