@@ -112,11 +112,8 @@ class OpenApiFactory implements OpenApiFactoryInterface {
                     '201' => [
                         'description' => "User created"
                     ],
-                    '400' => [
-                        'description' => "Credentials are invalid"
-                    ],
                     '401' => [
-                        'description' => "Credentials are empty"
+                        'description' => "An error has been throw, see the 'error_message' key"
                     ]
                 ]
             )

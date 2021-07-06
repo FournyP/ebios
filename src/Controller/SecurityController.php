@@ -60,11 +60,19 @@ class SecurityController extends AbstractController
                         return new Response('', 201);
                     }
 
-                    return $this->json($validation, 400);
+                    return $this->json([
+                        'error_message' => "Invalid credentials"
+                    ], 401);
                 }
+
+                return $this->json([
+                    'error_message' => "User already exist"
+                ]);
             }
         }
 
-        return new Response('', 401);
+        return $this->json([
+            'error_message' => "Empty credentials"
+        ], 401);
     }
 }
