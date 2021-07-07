@@ -5,7 +5,9 @@ namespace App\Entity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GapRepository;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ORM\Entity(repositoryClass=GapRepository::class)
@@ -13,7 +15,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:Gap']],
     denormalizationContext: ['groups' => ['write:Gap']]
-)]
+),
+ApiFilter(SearchFilter::class, properties: ['securityBaseline' => "exact"])]
 class Gap
 {
     /**
