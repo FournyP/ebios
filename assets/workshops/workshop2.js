@@ -76,7 +76,7 @@ function Workshop2() {
     }
     return (
         <Container>
-            <Box display="flex" alignItems="center" className={classes.header}>
+            <Box display="flex" alignItems="center" className={classes.header} textAlign="left">
                 <Box className={classes.textField}>
                     <h3>Sources de risques</h3>
                 </Box>
