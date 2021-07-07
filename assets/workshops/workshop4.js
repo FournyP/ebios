@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function Workshop4() {
+function Workshop4(props) {
     const classes = useStyles()
     const [inputFields, setInputFields] = useState([
         { id: uuidv4(), scenario: '', vraisemblance: 1 },
@@ -132,5 +133,9 @@ function Workshop4() {
         </Container >
     );
 }
+
+Workshop4.propTypes = {
+  projectId: PropTypes.number,
+};
 
 export default Workshop4;

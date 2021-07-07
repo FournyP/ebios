@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from "prop-types";
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -38,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function fetchWorkshop2(){
-    const request = new Request(process.env.API_URL + "api/workshop2s", {
+    const request = new Request(process.env.API_URL + "api/workshop2s?project=", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-      },
+      }
     });
 
   return await (await fetch(request)).json();
@@ -63,7 +64,7 @@ function sendWorkshop2(){
     const request = new Request(process.env.API_URL + "api/workshop2s");
 }
 
-function Workshop2() {
+function Workshop2(props) {
     const classes = useStyles()
     const [inputFields, setInputFields] = useState([
         {
@@ -222,5 +223,9 @@ function Workshop2() {
         </Container >
     );
 }
+
+Workshop2.propTypes = {
+  projectId: PropTypes.number,
+};
 
 export default Workshop2;

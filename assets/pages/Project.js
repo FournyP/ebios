@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Project() {
+function Project(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -73,40 +73,44 @@ function Project() {
         setValue(newValue);
     };
     return (
-        <div>
-            <Appbar />
-            <AppBar position="static">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="Workshops"
-                    variant="fullWidth"
-                    className={classes.tabs}
-                >
-                    <Tab label="Atelier 1" {...a11yProps(0)} className={classes.tab1} />
-                    <Tab label="Atelier 2" {...a11yProps(1)} className={classes.tab2} />
-                    <Tab label="Atelier 3" {...a11yProps(2)} className={classes.tab3} />
-                    <Tab label="Atelier 4" {...a11yProps(3)} className={classes.tab4} />
-                    <Tab label="Atelier 5" {...a11yProps(4)} className={classes.tab5} />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                <WorkShop1 />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                <WorkShop2 />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                <WorkShop3 />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-                <WorkShop4 />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-                <WorkShop5 />
-            </TabPanel>
-        </div >
+      <div>
+        <Appbar />
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="Workshops"
+            variant="fullWidth"
+            className={classes.tabs}
+          >
+            <Tab label="Atelier 1" {...a11yProps(0)} className={classes.tab1} />
+            <Tab label="Atelier 2" {...a11yProps(1)} className={classes.tab2} />
+            <Tab label="Atelier 3" {...a11yProps(2)} className={classes.tab3} />
+            <Tab label="Atelier 4" {...a11yProps(3)} className={classes.tab4} />
+            <Tab label="Atelier 5" {...a11yProps(4)} className={classes.tab5} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <WorkShop1 projectId={props.id} />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <WorkShop2 projectId={props.id} />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <WorkShop3 projectId={props.id} />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <WorkShop4 projectId={props.id} />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <WorkShop5 projectId={props.id} />
+        </TabPanel>
+      </div>
     );
 }
+
+Table.propTypes = {
+  id: PropTypes.number
+};
 
 export default Project;

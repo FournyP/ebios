@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
-import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
         color: "white"
     }
 }));
-function Workshop1() {
+function Workshop1(props) {
     const classes = useStyles();
     const [feardEvents, setfeardEvents] = useState([
         { id: uuidv4(), valeurMetier: '', evenementRedouté: '', evenementRedouté: '', impacts: '', gravite: 1 },
@@ -216,5 +216,9 @@ function Workshop1() {
         </Box>
     );
 }
+
+Workshop1.propTypes = {
+  projectId: PropTypes.number,
+};
 
 export default Workshop1;
