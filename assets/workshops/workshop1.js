@@ -7,8 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/RemoveCircle';
+import AddIcon from '@material-ui/icons/AddCircle';
 import { v4 as uuidv4 } from 'uuid';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,11 +17,6 @@ import Select from '@material-ui/core/Select';
 
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-        },
-    },
     textarea: {
         resize: "both",
         width: "75%"
@@ -32,10 +27,18 @@ const useStyles = makeStyles(theme => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 130,
+        minWidth: "15%",
     },
     faibleMenu: {
         color: "blue",
+    },
+    textField: {
+        margin: theme.spacing(1),
+        width: "23%",
+    },
+    header: {
+        background: '#c7317c',
+        color: "white"
     }
 }));
 function Workshop1() {
@@ -135,63 +138,79 @@ function Workshop1() {
                 </Button>
             </Box>
 
-            <h2>2/ IDENTIFIER LES ÉVÉNEMENTS REDOUTÉS</h2>
-            <Container>
-                <form className={classes.root} onSubmit={handleSubmit}>
-                    {feardEvents.map(inputField => (
-                        <div key={inputField.id}>
-                            <TextField
-                                name="valeurMetier"
-                                label="Valeur Métier"
-                                variant="filled"
-                                value={inputField.valeurMetier}
-                                onChange={event => handleChangeInput(inputField.id, event)}
-                            />
-                            <TextField
-                                name="evenementRedouté"
-                                label="Evènement redouté"
-                                variant="filled"
-                                multiline
-                                value={inputField.evenementRedouté}
-                                onChange={event => handleChangeInput(inputField.id, event)}
-                            />
-                            <TextField
-                                name="impacts"
-                                label="Impacts"
-                                variant="filled"
-                                multiline
-                                value={inputField.impacts}
-                                onChange={event => handleChangeInput(inputField.id, event)}
-                            />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel>Gravité</InputLabel>
-                                <Select
-                                    name="gravite"
-                                    defaultValue={1}
-                                    onClick={event => handleChangeInput(inputField.id, event)}>
-                                    <MenuItem value={1}>Mineur</MenuItem>
-                                    <MenuItem value={2}>Significative</MenuItem>
-                                    <MenuItem value={3}>Critique</MenuItem>
-                                    <MenuItem value={4}>Grave</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <IconButton disabled={feardEvents.length === 1} onClick={() => handleRemoveFields(inputField.id)}>
-                                <RemoveIcon />
-                            </IconButton>
-                            <IconButton onClick={handleAddFields}>
-                                <AddIcon />
-                            </IconButton>
-                        </div>
-                    ))}
-                    <Button
-                        className={classes.button}
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        onClick={handleSubmit}
-                    >Send</Button>
-                </form>
-            </Container>
+            <h2>IDENTIFICATION DES ÉVÉNEMENTS REDOUTÉS</h2>
+            <Box display="flex" alignItems="center" className={classes.header} textAlign="left">
+                <Box className={classes.textField}>
+                    <h3>Valeur Métier</h3>
+                </Box>
+                <Box className={classes.textField}>
+                    <h3>Motivation</h3>
+                </Box>
+                <Box className={classes.textField}>
+                    <h3>Ressource</h3>
+                </Box>
+                <Box className={classes.formControl}>
+                    <h3>Pertinence</h3>
+                </Box>
+            </Box >
+            <form onSubmit={handleSubmit}>
+                {feardEvents.map(inputField => (
+                    <Box key={inputField.id}
+                        display="flex"
+                        alignItems="center"
+                        borderTop={1}
+                        borderColor="grey.500">
+                        <TextField
+                            name="valeurMetier"
+                            label="Valeur Métier"
+                            className={classes.textField}
+                            value={inputField.valeurMetier}
+                            onChange={event => handleChangeInput(inputField.id, event)}
+                        />
+                        <TextField
+                            name="evenementRedouté"
+                            label="Evènement redouté"
+                            className={classes.textField}
+                            multiline
+                            value={inputField.evenementRedouté}
+                            onChange={event => handleChangeInput(inputField.id, event)}
+                        />
+                        <TextField
+                            name="impacts"
+                            label="Impacts"
+                            className={classes.textField}
+                            multiline
+                            value={inputField.impacts}
+                            onChange={event => handleChangeInput(inputField.id, event)}
+                        />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel>Gravité</InputLabel>
+                            <Select
+                                name="gravite"
+                                defaultValue={1}
+                                onClick={event => handleChangeInput(inputField.id, event)}>
+                                <MenuItem value={1}>Mineur</MenuItem>
+                                <MenuItem value={2}>Significative</MenuItem>
+                                <MenuItem value={3}>Critique</MenuItem>
+                                <MenuItem value={4}>Grave</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <IconButton disabled={feardEvents.length === 1} onClick={() => handleRemoveFields(inputField.id)}>
+                            <RemoveIcon />
+                        </IconButton>
+                        <IconButton onClick={handleAddFields}>
+                            <AddIcon />
+                        </IconButton>
+                    </Box>
+                ))}
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    onClick={handleSubmit}
+                >Send</Button>
+            </form>
 
 
         </Box>
