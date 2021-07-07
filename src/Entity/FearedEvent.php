@@ -5,7 +5,9 @@ namespace App\Entity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FearedEventRepository;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ORM\Entity(repositoryClass=FearedEventRepository::class)
@@ -13,7 +15,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:FearedEvent']],
     denormalizationContext: ['groups' => ['write:FearedEvent']]
-)]
+),
+ApiFilter(SearchFilter::class, properties: ['businessAsset' => "exact"])]
 class FearedEvent
 {
     /**
