@@ -35,7 +35,33 @@ const useStyles = makeStyles((theme) => ({
         background: '#6d2a69',
         color: "white"
     }
-}))
+}));
+
+async function fetchWorkshop2(){
+    const request = new Request(process.env.API_URL + "api/workshop2s", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+  return await (await fetch(request)).json();
+}
+
+async function fetchRisks(){
+    const request = new Request(process.env.API_URL + "api/risks", {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    });
+
+    return await (await fetch(request)).json();
+}
+
+function sendWorkshop2(){
+    const request = new Request(process.env.API_URL + "api/workshop2s");
+}
 
 function Workshop2() {
     const classes = useStyles()

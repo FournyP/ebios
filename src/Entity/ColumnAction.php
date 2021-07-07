@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\ColumnActionRepository;
 use App\Entity\OperationalScenario;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ORM\Entity(repositoryClass=ColumnActionRepository::class)
@@ -16,7 +18,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:ColumnAction']],
     denormalizationContext: ['groups' => ['write:ColumnAction']]
-)]
+),
+ApiFilter(SearchFilter::class, properties: ['operationalScenario' => "exact"])]
 class ColumnAction
 {
     /**

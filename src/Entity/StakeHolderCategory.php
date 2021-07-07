@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\StakeHolderCategoryRepository;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ORM\Entity(repositoryClass=StakeHolderCategoryRepository::class)
@@ -15,7 +17,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:StakeHolderCategory']],
     denormalizationContext: ['groups' => ['write:StakeHolderCategory']]
-)]
+),
+ApiFilter(SearchFilter::class, properties: ['workshop3' => "exact"])]
 class StakeHolderCategory
 {
     /**
