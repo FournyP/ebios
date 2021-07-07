@@ -9,6 +9,7 @@ import {
   TableCell,
 } from "@material-ui/core";
 import { useTable } from "react-table";
+import { Link } from "react-router-dom";
 
 function Table(props) {
   const columns = props.columns;
@@ -41,15 +42,15 @@ function Table(props) {
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <TableRow {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <TableCell {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
+                  <TableRow {...row.getRowProps()} component={Link} to={"/project/" + row.values.id}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <TableCell {...cell.getCellProps()}>
+                          {cell.render("Cell")}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
               );
             })}
           </TableBody>

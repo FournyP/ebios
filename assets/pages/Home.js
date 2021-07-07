@@ -47,9 +47,13 @@ function Home() {
   const [tableData, setTableData] = React.useState([]);
 
   React.useEffect(async () => {
-    if (loadingData) {
-      let response = await fetchProjects();
-      setTableData(response["hydra:member"]);
+    if (isLogged) {
+      if (loadingData) {
+        let response = await fetchProjects();
+        setTableData(response["hydra:member"]);
+        setLoadingData(false);
+      }
+    } else {
       setLoadingData(false);
     }
   }, []);
