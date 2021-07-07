@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\Workshop5Repository;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ORM\Entity(repositoryClass=Workshop5Repository::class)
@@ -15,7 +17,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     normalizationContext: ['groups' => ['read:Workshop5']],
     denormalizationContext: ['groups' => ['write:Workshop5']]
-)]
+),
+ApiFilter(SearchFilter::class, properties: ['project' => "exact"])]
 class Workshop5
 {
     /**
