@@ -144,13 +144,13 @@ function Workshop1() {
                     <h3>Valeur Métier</h3>
                 </Box>
                 <Box className={classes.textField}>
-                    <h3>Motivation</h3>
+                    <h3>Evènement redouté</h3>
                 </Box>
                 <Box className={classes.textField}>
-                    <h3>Ressource</h3>
+                    <h3>Impacts</h3>
                 </Box>
                 <Box className={classes.formControl}>
-                    <h3>Pertinence</h3>
+                    <h3>Gravité</h3>
                 </Box>
             </Box >
             <form onSubmit={handleSubmit}>
