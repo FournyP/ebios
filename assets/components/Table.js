@@ -26,7 +26,7 @@ function Table(props) {
   return (
     <div>
       <TableContainer>
-        <MaterialTable {...getTableProps()} fullWidth>
+        <MaterialTable {...getTableProps()} fullwidth="true">
           <TableHead>
             {headerGroups.map((headerGroup) => (
               <TableRow {...headerGroup.getHeaderGroupProps()}>
