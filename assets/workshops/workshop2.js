@@ -100,11 +100,11 @@ function Workshop2(props) {
 
   const initView = async () => {
     let response = await fetchRisks();
-    let risks = response["hydra:member"];
-    risks.map((risk) => {
+    let collection = response["hydra:member"];
+    collection.map((risk) => {
       risk.toCreate = false;
     });
-    setRisks(risks);
+    setRisks(collection);
     setIsLoading(false);
   };
 
