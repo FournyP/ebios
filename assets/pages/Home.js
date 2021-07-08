@@ -7,6 +7,7 @@ import {
   Container
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import Waiting from "../components/Waiting";
 
 async function fetchProjects() {
   let request = new Request(process.env.API_URL + "api/projects", {
@@ -75,7 +76,7 @@ function Home() {
             Créer un projet
           </Button>
           {loadingData ? (
-            <p>Loading Please wait...</p>
+            <Waiting />
           ) : (
             <Table columns={tableColumns} data={tableData} />
           )}
