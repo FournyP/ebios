@@ -38,6 +38,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+async function fetchProject(projectId) {
+  const request = new Request(
+    process.env.API_URL + "api/project/" + projectId,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    }
+  );
+
+  return await (await fetch(request)).json();
+}
+
 function Project() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
@@ -48,9 +62,11 @@ function Project() {
 
     const { id } = useParams();
     const projectId = parseInt(id);
-    
-    if (projectId == undefined) {
-      throw "Select a project id";
+
+    const project = fetchProject(projectId);
+
+    if (project == null || project == undefined) {
+      throw new "Unable to find the project";
     }
 
     return (
@@ -72,19 +88,19 @@ function Project() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <WorkShop1 projectId={projectId} />
+          <WorkShop1 project={project} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <WorkShop2 projectId={projectId} />
+          <WorkShop2 project={project} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <WorkShop3 projectId={projectId} />
+          <WorkShop3 project={project} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <WorkShop4 projectId={projectId} />
+          <WorkShop4 project={project} />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <WorkShop5 projectId={projectId} />
+          <WorkShop5 project={project} />
         </TabPanel>
       </div>
     );

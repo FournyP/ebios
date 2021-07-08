@@ -10,7 +10,7 @@ function Workshop5(props) {
 }
 
 Workshop5.propTypes = {
-  projectId: PropTypes.number,
+  project: PropTypes.object,
 };
 
 export default Workshop5;

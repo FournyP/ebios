@@ -218,7 +218,7 @@ function Workshop1(props) {
 }
 
 Workshop1.propTypes = {
-  projectId: PropTypes.number,
+  project: PropTypes.object,
 };
 
 export default Workshop1;
