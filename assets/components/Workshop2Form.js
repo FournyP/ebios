@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 function Workshop2Form(props) {
   const classes = useStyles();
 
-  const [inputFields, setInputFields] = React.useState([
+  const [inputFields, setInputFields] = React.useState(props.initValues.length > 0 ? props.initValues : [
     {
       id: uuidv4(),
       source: "",
@@ -46,7 +46,8 @@ function Workshop2Form(props) {
         resource: 1,
         activity: 1,
         pertinence: 1
-      }
+      },
+      toCreate : true
     },
   ]);
 
@@ -55,16 +56,27 @@ function Workshop2Form(props) {
     props.handleSubmit(inputFields);
   };
 
-  const handleChangeInput = (id, event) => {
-    const newInputFields = inputFields.map((i) => {
-      if (id === i.id) {
-        i[event.target.name] = event.target.value;
+  const handleChangeTextInput = (id, event) => {
+    const newInputFields = inputFields.map((inputField) => {
+      if (id === inputField.id) {
+        inputField[event.target.name] = event.target.value;
       }
-      return i;
+      return inputField;
     });
 
     setInputFields(newInputFields);
   };
+
+  const handleChangeEvaluationInput = (id, event) => {
+    const newInputFields = inputFields.map((inputField) => {
+      if (id === inputField.id) {
+        inputField.evaluation[event.target.name] = event.target.value;
+      }
+      return inputField;
+    });
+
+    setInputFields(newInputFields);
+  }
 
   const handleAddFields = () => {
     setInputFields([
@@ -79,6 +91,7 @@ function Workshop2Form(props) {
           activity: 1,
           pertinence: 1,
         },
+        toCreate: true
       },
     ]);
   };
@@ -108,7 +121,7 @@ function Workshop2Form(props) {
               name="source"
               label="Source de risque"
               value={inputField.source}
-              onChange={(event) => handleChangeInput(inputField.id, event)}
+              onChange={(event) => handleChangeTextInput(inputField.id, event)}
             />
             <TextField
               className={classes.textField}
@@ -116,15 +129,17 @@ function Workshop2Form(props) {
               label="Objectif Visé"
               multiline
               value={inputField.goal}
-              onChange={(event) => handleChangeInput(inputField.id, event)}
+              onChange={(event) => handleChangeTextInput(inputField.id, event)}
             />
             <FormControl className={classes.formControl}>
               <InputLabel id="motivation-select">Motivation</InputLabel>
               <Select
                 id="motivation-select"
                 name="motivation"
-                defaultValue={inputField.evaluation.motivation}
-                onClick={(event) => handleChangeInput(inputField.id, event)}
+                value={inputField.evaluation.motivation}
+                onClick={(event) =>
+                  handleChangeEvaluationInput(inputField.id, event)
+                }
               >
                 <MenuItem value={1}>+</MenuItem>
                 <MenuItem value={2}>++</MenuItem>
@@ -135,8 +150,10 @@ function Workshop2Form(props) {
               <InputLabel>Ressources</InputLabel>
               <Select
                 name="resource"
-                defaultValue={inputField.evaluation.resource}
-                onClick={(event) => handleChangeInput(inputField.id, event)}
+                value={inputField.evaluation.resource}
+                onClick={(event) =>
+                  handleChangeEvaluationInput(inputField.id, event)
+                }
               >
                 <MenuItem value={1}>+</MenuItem>
                 <MenuItem value={2}>++</MenuItem>
@@ -147,8 +164,10 @@ function Workshop2Form(props) {
               <InputLabel>Activité</InputLabel>
               <Select
                 name="activity"
-                defaultValue={inputField.evaluation.activity}
-                onClick={(event) => handleChangeInput(inputField.id, event)}
+                value={inputField.evaluation.activity}
+                onClick={(event) =>
+                  handleChangeEvaluationInput(inputField.id, event)
+                }
               >
                 <MenuItem value={1}>+</MenuItem>
                 <MenuItem value={2}>++</MenuItem>
@@ -159,8 +178,10 @@ function Workshop2Form(props) {
               <InputLabel>Pertinence</InputLabel>
               <Select
                 name="pertinence"
-                defaultValue={inputField.evaluation.pertinence}
-                onClick={(event) => handleChangeInput(inputField.id, event)}
+                value={inputField.evaluation.pertinence}
+                onClick={(event) =>
+                  handleChangeEvaluationInput(inputField.id, event)
+                }
               >
                 <MenuItem value={1}>Faible</MenuItem>
                 <MenuItem value={2}>Moyenne</MenuItem>

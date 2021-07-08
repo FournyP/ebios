@@ -47,17 +47,41 @@ async function fetchRisks(workshop2Id) {
   return await (await fetch(request)).json();
 }
 
+function createRiskPostRequest(risk) {
+  return new Request(process.env.API_URL + "api/risks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(risk),
+  });
+}
+
+function createRiskPutRequest(risk, id) {
+  return new Request(process.env.API_URL + "api/risks/" + id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(risk),
+  });
+}
+
 async function sendRisks(workshopRef, risks) {
   let requests = [];
-  for (risk of risks) {
+  for (let risk of risks) {
+    let request;
+    let riskId = risk.id;
+    delete risk.id;
     risk.workshop2 = workshopRef;
-    let request = new Request(process.env.API_URL + "api/risks", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(risk),
-    });
+
+    console.log(risk);
+    
+    if (risk.toCreate) {
+      request = createRiskPostRequest(risk);
+    } else {
+      request = createRiskPutRequest(risk, riskId);
+    }
 
     requests.push(request);
   }
@@ -74,16 +98,26 @@ function Workshop2(props) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [risks, setRisks] = React.useState([]);
 
+  const initView = async () => {
+    let response = await fetchRisks();
+    let risks = response["hydra:member"];
+    risks.map((risk) => {
+      risk.toCreate = false;
+    });
+    setRisks(risks);
+    setIsLoading(false);
+  };
+
   React.useEffect(async () => {
     if (isLoading) {
-      let response = await fetchRisks();
-      setRisks(response["hydra:member"]);
-      setIsLoading(false);
+      await initView();
     }
   }, []);
 
-  const handleSubmit = (inputs) => {
-    sendRisks(props.project["@id"], inputs);
+  const handleSubmit = async (inputs) => {
+    await sendRisks(props.project.workshop2["@id"], inputs);
+    setIsLoading(true);
+    await initView();
   };
 
   return (
