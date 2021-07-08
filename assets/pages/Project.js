@@ -9,6 +9,7 @@ import WorkShop2 from '../workshops/workshop2';
 import WorkShop3 from '../workshops/workshop3';
 import WorkShop4 from '../workshops/workshop4';
 import WorkShop5 from '../workshops/workshop5';
+import Waiting from '../components/Waiting';
 
 function a11yProps(index) {
     return {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 async function fetchProject(projectId) {
   const request = new Request(
-    process.env.API_URL + "api/project/" + projectId,
+    process.env.API_URL + "api/projects/" + projectId,
     {
       method: "GET",
       headers: {
@@ -54,28 +55,35 @@ async function fetchProject(projectId) {
 
 function Project() {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const [tabIndex, setTabIndex] = React.useState(0);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [project, setProject] = React.useState(null);
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleTabChange = (event, newIndex) => {
+        setTabIndex(newIndex);
     };
 
     const { id } = useParams();
     const projectId = parseInt(id);
 
-    const project = fetchProject(projectId);
-
-    if (project == null || project == undefined) {
-      throw new "Unable to find the project";
-    }
+    React.useEffect(async () => {
+      if (isLoading) {
+        let response = await fetchProject(projectId);
+        setProject(response);
+        if (response == null || response == undefined) {
+          throw "Unable to find the project";
+        }
+        setIsLoading(false);
+      }
+    }, []);
 
     return (
       <div>
         <Appbar />
         <AppBar position="static">
           <Tabs
-            value={value}
-            onChange={handleChange}
+            value={tabIndex}
+            onChange={handleTabChange}
             aria-label="Workshops"
             variant="fullWidth"
             className={classes.tabs}
@@ -87,21 +95,29 @@ function Project() {
             <Tab label="Atelier 5" {...a11yProps(4)} className={classes.tab5} />
           </Tabs>
         </AppBar>
-        <TabPanel value={value} index={0}>
-          <WorkShop1 project={project} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <WorkShop2 project={project} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <WorkShop3 project={project} />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <WorkShop4 project={project} />
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          <WorkShop5 project={project} />
-        </TabPanel>
+        {isLoading ? (
+          <div>
+            <Waiting />
+          </div>
+        ) : (
+          <div>
+            <TabPanel value={tabIndex} index={0}>
+              <WorkShop1 project={project} />
+            </TabPanel>
+            <TabPanel value={tabIndex} index={1}>
+              <WorkShop2 project={project} />
+            </TabPanel>
+            <TabPanel value={tabIndex} index={2}>
+              <WorkShop3 project={project} />
+            </TabPanel>
+            <TabPanel value={tabIndex} index={3}>
+              <WorkShop4 project={project} />
+            </TabPanel>
+            <TabPanel value={tabIndex} index={4}>
+              <WorkShop5 project={project} />
+            </TabPanel>
+          </div>
+        )}
       </div>
     );
 }
