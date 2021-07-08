@@ -1,41 +1,14 @@
 import React from "react";
 import Appbar from "../components/Appbar";
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
+import { AppBar, Tabs, Tab } from '@material-ui/core';
+import TabPanel from '../components/TabPanel';
 import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from 'react-router-dom';
 import WorkShop1 from '../workshops/workshop1';
 import WorkShop2 from '../workshops/workshop2';
 import WorkShop3 from '../workshops/workshop3';
 import WorkShop4 from '../workshops/workshop4';
 import WorkShop5 from '../workshops/workshop5';
-
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    <div>{children}</div>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
 
 function a11yProps(index) {
     return {
@@ -65,13 +38,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Project(props) {
+function Project() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const { id } = useParams();
+    const projectId = parseInt(id);
+    
+    if (projectId == undefined) {
+      throw "Select a project id";
+    }
+
     return (
       <div>
         <Appbar />
@@ -91,26 +72,22 @@ function Project(props) {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <WorkShop1 projectId={props.id} />
+          <WorkShop1 projectId={projectId} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <WorkShop2 projectId={props.id} />
+          <WorkShop2 projectId={projectId} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <WorkShop3 projectId={props.id} />
+          <WorkShop3 projectId={projectId} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <WorkShop4 projectId={props.id} />
+          <WorkShop4 projectId={projectId} />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <WorkShop5 projectId={props.id} />
+          <WorkShop5 projectId={projectId} />
         </TabPanel>
       </div>
     );
 }
-
-Table.propTypes = {
-  id: PropTypes.number
-};
 
 export default Project;

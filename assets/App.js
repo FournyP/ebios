@@ -22,7 +22,7 @@ function App() {
           <Route exact from="/Signup">
             <Signup />
           </Route>
-          <Route exact from="/Project">
+          <Route exact from="/Project/:id">
             <Project />
           </Route>
           <Route exact from="/CreateProject">
