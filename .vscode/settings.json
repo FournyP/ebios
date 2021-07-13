@@ -22,9 +22,9 @@
             "port": 3306,
             "driver": "MariaDB",
             "name": "Heroku",
-            "username": "sgv5ybkhb5jv9lxi",
-            "password": "geq60ysyoxfgdobo",
-            "database": "zhnke3gg9bmpinnn"
+            "database": "j6nqcm1cvz8m82do",
+            "username": "njgxs77f14olhgmc",
+            "password": "ftv2r1nfthpe8rjt"
         }
     ]
 }
