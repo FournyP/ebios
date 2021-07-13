@@ -8,7 +8,7 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "Ebios",
+            "name": "Local",
             "database": "ebios",
             "username": "root",
             "password": "1234"
