@@ -18,4 +18,4 @@ It's a school project with the ESIEE-IT
 # Database diagram
 
 Our database diagram is at this link : 
-[https://i.ibb.co/LtL2pPw/image.png](https://i.ibb.co/LtL2pPw/image.png)
+[https://i.ibb.co/LtL2pPw/image.png](https://i.ibb.co/XxC49m2/DATABASE.png)
