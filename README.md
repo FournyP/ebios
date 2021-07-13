@@ -14,3 +14,8 @@ It's a school project with the ESIEE-IT
 
 * [Build](https://github.com/FournyP/ebios/wiki/Build)
 * [Deploiement](https://github.com/FournyP/ebios/wiki/Deploiement)
+
+# Database diagram
+
+Our database diagram is at this link : 
+[https://i.ibb.co/LtL2pPw/image.png](https://i.ibb.co/LtL2pPw/image.png)
