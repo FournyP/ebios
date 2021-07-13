@@ -9,3 +9,8 @@ Ebios is a project to implement the ebios risk management method as a web servic
 # Why ?
 
 It's a school project with the ESIEE-IT
+
+# Heroku account
+
+Login: bofekej878@godpeed.com
+Password : QmX9KpHDLjWDK2@&A3bo
