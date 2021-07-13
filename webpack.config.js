@@ -73,7 +73,12 @@ Encore
   //.autoProvidejQuery()
 
   .configureDefinePlugin((options) => {
-    const env = dotenv.config();
+
+    let envFile =
+      process.env.NODE_ENV == undefined || process.env.NODE_ENV == "production"
+        ? ".env"
+        : ".env." + process.env.NODE_ENV;
+    const env = dotenv.config({ path: envFile });
 
     options["process.env"].API_URL = JSON.stringify(env.parsed.WEBSITE_URL);
   })
