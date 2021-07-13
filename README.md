@@ -14,8 +14,3 @@ It's a school project with the ESIEE-IT
 
 * [Build](https://github.com/FournyP/ebios/wiki/Build)
 * [Deploiement](https://github.com/FournyP/ebios/wiki/Deploiement)
-
-# Heroku account
-
-Login: bofekej878@godpeed.com
-Password : QmX9KpHDLjWDK2@&A3bo
