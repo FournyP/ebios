@@ -26,6 +26,5 @@ jobs:
       - uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
             heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-            heroku_app_name: "ebios-risk-manager" #Must be unique in Heroku
+            heroku_app_name: ${{secrets.HEROKU_PROJECT_NAME}} #Must be unique in Heroku
             heroku_email: "bofekej878@godpeed.com"
-
