@@ -12,6 +12,19 @@
             "database": "ebios",
             "username": "root",
             "password": "1234"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "eporqep6b4b8ql12.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "Heroku",
+            "username": "sgv5ybkhb5jv9lxi",
+            "password": "geq60ysyoxfgdobo",
+            "database": "zhnke3gg9bmpinnn"
         }
     ]
 }
