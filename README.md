@@ -12,7 +12,8 @@ It's a school project with the ESIEE-IT
 
 # Wiki
 
-* [Wiki](https://github.com/FournyP/ebios/wiki)
+* [Build](https://github.com/FournyP/ebios/wiki/Build)
+* [Deploiement](https://github.com/FournyP/ebios/wiki/Deploiement)
 
 # Heroku account
 
