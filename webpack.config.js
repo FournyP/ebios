@@ -71,14 +71,8 @@ Encore
   // uncomment if you're having problems with a jQuery plugin
   //.autoProvidejQuery()
 
-  .configureDevServerOptions((options) => {
-    options.https = {
-      pfx: path.join(process.env.HOME, ".symfony/certs/default.p12"),
-    };
-  })
-
   .configureDefinePlugin((options) => {
-    options["process.env"].API_URL = "'https://127.0.0.1:8000/'";
+    options["process.env"].API_URL = "'http://127.0.0.1:8000/'";
   })
   ;
 
