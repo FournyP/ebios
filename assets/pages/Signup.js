@@ -72,7 +72,7 @@ export default function SignUp() {
                 username,
                 password
             });
-            history.push("/");
+            history.push("/Signin");
         } catch (e) {
             setAlert(true);
             setAlertMsg(e);
