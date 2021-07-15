@@ -43,9 +43,9 @@ function createOperationalScenarioPostRequest(operationalScenario) {
   });
 }
 
-function createOperationelScenatioPutRequest(operationalScenario) {
+function createOperationalScenarioPutRequest(operationalScenario, operationalScenarioId) {
   return new Request(
-    process.env.API_URL + "api/operational_scenarios/" + operationalScenario.id,
+    process.env.API_URL + "api/operational_scenarios/" + operationalScenarioId,
     {
       method: "PUT",
       headers: {
@@ -56,14 +56,23 @@ function createOperationelScenatioPutRequest(operationalScenario) {
   );
 }
 
-async function sendOperationalScenarios(workshopId, inputFields) {
+async function sendOperationalScenarios(workshopRef, inputFields) {
   let requests = [];
-  for (let field of inputFields) {
+  for (let operationalScenario of inputFields) {
     let request;
-    if (field.toCreate) {
-      request = createOperationalScenarioPostRequest(field);
+    let operationalScenarioId = operationalScenario.id;
+    delete operationalScenario.id;
+    operationalScenario.workshop4 = workshopRef;
+    operationalScenario.strategicScenario = operationalScenario.scenario["@id"];
+    delete operationalScenario.scenario;
+
+    if (operationalScenario.toCreate) {
+      request = createOperationalScenarioPostRequest(operationalScenario);
     } else {
-      request = createOperationelScenatioPutRequest(field);
+      request = createOperationalScenarioPutRequest(
+        operationalScenario,
+        operationalScenarioId
+      );
     }
 
     requests.push(request);
@@ -88,12 +97,12 @@ function Workshop4(props) {
       operationalScenario.toCreate = false;
     });
     setOperationalScenarios(collection);
+    setIsLoading(false);
   };
 
   React.useEffect(async () => {
     if (isLoading) {
       await initView();
-      setIsLoading(false);
     }
   }, []);
 

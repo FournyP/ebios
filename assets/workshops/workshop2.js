@@ -103,12 +103,12 @@ function Workshop2(props) {
       risk.toCreate = false;
     });
     setRisks(collection);
+    setIsLoading(false);
   };
 
   React.useEffect(async () => {
     if (isLoading) {
       await initView();
-      setIsLoading(false);
     }
   }, []);
 

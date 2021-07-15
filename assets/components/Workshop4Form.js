@@ -6,6 +6,7 @@ import {
   FormControl,
   MenuItem,
   InputLabel,
+  CircularProgress,
   TextField,
   Box,
   Select,
@@ -13,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { RemoveCircle, AddCircle } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
+import { Autocomplete } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -28,12 +30,87 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+async function fetchStrategicScenarios() {
+  const request = new Request(process.env.API_URL + "api/strategic_scenarios", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+  });
+
+  return await (await fetch(request)).json();
+}
+
+function AsyncOperationalScenarioField(props) {
+  const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const loading = open && options.length === 0;
+
+  React.useEffect(async () => {
+    if (!loading) {
+      return undefined;
+    }
+
+    let strategicScenarios = await fetchStrategicScenarios();
+    setOptions(strategicScenarios["hydra:member"]);
+
+    return () => {
+      active = false;
+    };
+  }, [loading]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
+  return (
+    <Autocomplete
+      open={open}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
+      getOptionSelected={(option, value) => option.name === value.name}
+      getOptionLabel={(option) => option.name}
+      options={options}
+      loading={loading}
+      className={props.className}
+      onChange={(event, newValue) => {
+        props.onChange(event, newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={props.label}
+          variant="outlined"
+          className={props.className}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+  );
+}
+
 function Workshop4Form(props) {
   const classes = useStyles();
   const [inputFields, setInputFields] = React.useState(
     props.initValues.length > 0
       ? props.initValues
-      : [{ id: uuidv4(), scenario: "", vraisemblance: 1, toCreate: true }]
+      : [{ id: uuidv4(), scenario: null, overallLikelihood: 1, toCreate: true }]
   );
 
   const handleSubmit = (e) => {
@@ -41,20 +118,15 @@ function Workshop4Form(props) {
     props.handleSubmit(inputFields);
   };
 
-  const handleChangeInput = (id, event) => {
-    const newInputFields = inputFields.map((i) => {
-      if (id === i.id) {
-        i[event.target.name] = event.target.value;
-      }
-      return i;
-    });
-    setInputFields(newInputFields);
+  const handleChangeInput = (index, value, field) => {
+    inputFields[index][field] = value;
+    setInputFields(inputFields);
   };
 
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
-      { id: uuidv4(), scenario: "", vraisemblance: 1, toCreate: true },
+      { id: uuidv4(), scenario: null, overallLikelihood: 1, toCreate: true },
     ]);
   };
 
@@ -70,7 +142,7 @@ function Workshop4Form(props) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {inputFields.map((inputField) => (
+        {inputFields.map((inputField, index) => (
           <Box
             key={inputField.id}
             display="flex"
@@ -78,21 +150,28 @@ function Workshop4Form(props) {
             borderTop={1}
             borderColor="grey.500"
           >
-            <TextField
+            <AsyncOperationalScenarioField
               className={classes.textField}
               name="scenario"
               label="Scénario Opérationnel"
               multiline
               value={inputField.scenario}
-              onChange={(event) => handleChangeInput(inputField.id, event)}
+              onChange={(_, newValue) =>
+                handleChangeInput(index, newValue, "scenario")
+              }
             />
-
             <FormControl className={classes.formControl}>
               <InputLabel>Vraisemblance</InputLabel>
               <Select
-                name="vraisemblance"
-                defaultValue={1}
-                onClick={(event) => handleChangeInput(inputField.id, event)}
+                name="overallLikelihood"
+                defaultValue={inputField.overallLikelihood}
+                onClick={(event) =>
+                  handleChangeInput(
+                    index,
+                    event.target.value,
+                    "overallLikelihood"
+                  )
+                }
               >
                 <MenuItem value={1}>V1 Peu Vraisemblable</MenuItem>
                 <MenuItem value={2}>V2 Vraisemblable</MenuItem>
@@ -100,14 +179,12 @@ function Workshop4Form(props) {
                 <MenuItem value={4}>V4 Quasi-certain</MenuItem>
               </Select>
             </FormControl>
-
             <IconButton
               disabled={inputFields.length === 1}
               onClick={() => handleRemoveFields(inputField.id)}
             >
               <RemoveCircle />
             </IconButton>
-
             <IconButton onClick={handleAddFields}>
               <AddCircle />
             </IconButton>
