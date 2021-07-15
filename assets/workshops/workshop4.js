@@ -1,137 +1,137 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import RemoveIcon from '@material-ui/icons/RemoveCircle';
-import AddIcon from '@material-ui/icons/AddCircle';
-import { v4 as uuidv4 } from 'uuid';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Container, makeStyles } from "@material-ui/core";
+import Workshop4Form from "../components/Workshop4Form";
+import Waiting from "../components/Waiting";
 
 const useStyles = makeStyles((theme) => ({
-    button: {
-        margin: theme.spacing(1),
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: "18%",
-    },
-    texField: {
-        margin: theme.spacing(1),
-        minWidth: "70%",
-    },
-    header: {
-        background: '#c2a91f',
-        color: "white"
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: "18%",
+  },
+  textField: {
+    margin: theme.spacing(1),
+    minWidth: "70%",
+  },
+  header: {
+    background: "#c2a91f",
+    color: "white",
+  },
+}));
+
+async function fetchOperationalScenarios() {
+  const request = new Request(
+    process.env.API_URL + "api/operational_scenarios",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
-}))
+  );
+
+  return await (await fetch(request)).json();
+}
+
+function createOperationalScenarioPostRequest(operationalScenario) {
+  return new Request(process.env.API_URL + "api/operational_scenarios", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(operationalScenario),
+  });
+}
+
+function createOperationelScenatioPutRequest(operationalScenario) {
+  return new Request(
+    process.env.API_URL + "api/operational_scenarios/" + operationalScenario.id,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(operationalScenario),
+    }
+  );
+}
+
+async function sendOperationalScenarios(workshopId, inputFields) {
+  let requests = [];
+  for (let field of inputFields) {
+    let request;
+    if (field.toCreate) {
+      request = createOperationalScenarioPostRequest(field);
+    } else {
+      request = createOperationelScenatioPutRequest(field);
+    }
+
+    requests.push(request);
+  }
+
+  return await Promise.all(
+    requests.map((request) => {
+      return fetch(request);
+    })
+  );
+}
 
 function Workshop4(props) {
-    const classes = useStyles()
-    const [inputFields, setInputFields] = useState([
-        { id: uuidv4(), scenario: '', vraisemblance: 1 },
-    ]);
+  const classes = useStyles();
+  const [operationalScenarios, setOperationalScenarios] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("InputFields", inputFields);
-    };
+  const initView = async () => {
+    let response = await fetchOperationalScenarios();
+    let collection = response["hydra:member"];
+    collection.map((operationalScenario) => {
+      operationalScenario.toCreate = false;
+    });
+    setOperationalScenarios(collection);
+  };
 
-    const handleChangeInput = (id, event) => {
-        const newInputFields = inputFields.map(i => {
-            if (id === i.id) {
-                i[event.target.name] = event.target.value
-            }
-            return i;
-        })
-        setInputFields(newInputFields);
+  React.useEffect(async () => {
+    if (isLoading) {
+      await initView();
+      setIsLoading(false);
     }
+  }, []);
 
-    const handleAddFields = () => {
-        setInputFields([...inputFields, { id: uuidv4(), scenario: '', vraisemblance: 1 }])
-    }
+  const handleSubmit = async (inputFields) => {
+    await sendOperationalScenarios(props.project.workshop4["@id"], inputFields);
+    setIsLoading(true);
+    await initView();
+  };
 
-    const handleRemoveFields = id => {
-        const values = [...inputFields];
-        values.splice(values.findIndex(value => value.id === id), 1);
-        setInputFields(values);
-    }
-    return (
-        <Container>
-            {/* Table header */}
-            <Box display="flex" alignItems="center" className={classes.header}>
-                <Box className={classes.texField}
-                    borderRight={1}
-                    borderColor="grey.500">
-                    <h3>Scénarios opérationnels</h3>
-                </Box>
-                <Box className={classes.formControl}>
-                    <h3>Vraisemblance</h3>
-                </Box>
+  return (
+    <Container>
+      {isLoading ? (
+        <div>
+          <Waiting />
+        </div>
+      ) : (
+        <div>
+          {/* Table header */}
+          <Box display="flex" alignItems="center" className={classes.header}>
+            <Box
+              className={classes.textField}
+              borderRight={1}
+              borderColor="grey.500"
+            >
+              <h3>Scénarios stratégic</h3>
             </Box>
-
-            {/* Example of sending data :
-            Array(
-            {id: "737a8730-144b-4707-815d-aa762d136a0c", scenario: "Un concurrent vole [...] informatique", vraisemblance: 4}
-            {id: "47ab8d3b-243b-4053-bc57-0ecdb29b11f2", scenario: "Un hacktiviste perturbe [...] étiquetage", vraisemblance: 1}
-            ) */}
-            <form onSubmit={handleSubmit}>
-                {inputFields.map(inputField => (
-                    <Box key={inputField.id}
-                        display="flex"
-                        alignItems="center"
-                        borderTop={1}
-                        borderColor="grey.500">
-
-                        <TextField
-                            className={classes.texField}
-                            name="scenario"
-                            label="Scénario Opérationnel"
-                            multiline
-                            value={inputField.scenario}
-                            onChange={event => handleChangeInput(inputField.id, event)}
-                        />
-
-                        <FormControl className={classes.formControl}>
-                            <InputLabel>Vraisemblance</InputLabel>
-                            <Select
-                                name="vraisemblance"
-                                defaultValue={1}
-                                onClick={event => handleChangeInput(inputField.id, event)}
-                            >
-                                <MenuItem value={1}>V1 Peu Vraisemblable</MenuItem>
-                                <MenuItem value={2}>V2 Vraisemblable</MenuItem>
-                                <MenuItem value={3}>V3 Très Vraisemblable</MenuItem>
-                                <MenuItem value={4}>V4 Quasi-certain</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                        <IconButton disabled={inputFields.length === 1} onClick={() => handleRemoveFields(inputField.id)}>
-                            <RemoveIcon />
-                        </IconButton>
-
-                        <IconButton onClick={handleAddFields}>
-                            <AddIcon />
-                        </IconButton>
-                    </Box>
-                ))}
-                <Button
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    onClick={handleSubmit}
-                >Send</Button>
-            </form>
-        </Container >
-    );
+            <Box className={classes.formControl}>
+              <h3>Vraisemblance</h3>
+            </Box>
+          </Box>
+          <Workshop4Form
+            handleSubmit={handleSubmit}
+            initValues={operationalScenarios}
+          />
+        </div>
+      )}
+    </Container>
+  );
 }
 
 Workshop4.propTypes = {
