@@ -30,7 +30,7 @@ class StrategicScenario
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(["read:StrategicScenario", "write:StrategicScenario"])]
+    #[Groups(["read:StrategicScenario", "write:StrategicScenario", "read:OperationalScenario"])]
     private $name;
 
     /**

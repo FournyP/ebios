@@ -78,6 +78,7 @@ function AsyncOperationalScenarioField(props) {
       getOptionLabel={(option) => option.name}
       options={options}
       loading={loading}
+      value={props.value}
       className={props.className}
       onChange={(event, newValue) => {
         props.onChange(event, newValue);
@@ -110,7 +111,14 @@ function Workshop4Form(props) {
   const [inputFields, setInputFields] = React.useState(
     props.initValues.length > 0
       ? props.initValues
-      : [{ id: uuidv4(), scenario: null, overallLikelihood: 1, toCreate: true }]
+      : [
+          {
+            id: uuidv4(),
+            strategicScenario: null,
+            overallLikelihood: 1,
+            toCreate: true,
+          },
+        ]
   );
 
   const handleSubmit = (e) => {
@@ -126,7 +134,12 @@ function Workshop4Form(props) {
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
-      { id: uuidv4(), scenario: null, overallLikelihood: 1, toCreate: true },
+      {
+        id: uuidv4(),
+        strategicScenario: null,
+        overallLikelihood: 1,
+        toCreate: true,
+      },
     ]);
   };
 
@@ -152,12 +165,12 @@ function Workshop4Form(props) {
           >
             <AsyncOperationalScenarioField
               className={classes.textField}
-              name="scenario"
+              name="strategicScenario"
               label="Scénario Opérationnel"
               multiline
-              value={inputField.scenario}
+              value={inputField.strategicScenario}
               onChange={(_, newValue) =>
-                handleChangeInput(index, newValue, "scenario")
+                handleChangeInput(index, newValue, "strategicScenario")
               }
             />
             <FormControl className={classes.formControl}>
