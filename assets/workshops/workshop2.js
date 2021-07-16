@@ -97,7 +97,7 @@ function Workshop2(props) {
   const [risks, setRisks] = React.useState([]);
 
   const initView = async () => {
-    let response = await fetchRisks();
+    let response = await fetchRisks(props.project.workshop2["@id"]);
     let collection = response["hydra:member"];
     collection.map((risk) => {
       risk.toCreate = false;

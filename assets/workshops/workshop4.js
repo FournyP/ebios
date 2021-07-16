@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function fetchOperationalScenarios() {
+async function fetchOperationalScenarios(workshopRef) {
   const request = new Request(
-    process.env.API_URL + "api/operational_scenarios",
+    process.env.API_URL + "api/operational_scenarios?workshop2=" + workshopRef,
     {
       method: "GET",
       headers: {
@@ -91,7 +91,7 @@ function Workshop4(props) {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const initView = async () => {
-    let response = await fetchOperationalScenarios();
+    let response = await fetchOperationalScenarios(props.project.workshop4["@id"]);
     let collection = response["hydra:member"];
     collection.map((operationalScenario) => {
       operationalScenario.toCreate = false;
