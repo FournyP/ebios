@@ -75,8 +75,6 @@ async function sendRisks(workshopRef, risks) {
     delete risk.id;
     risk.workshop2 = workshopRef;
 
-    console.log(risk);
-    
     if (risk.toCreate) {
       request = createRiskPostRequest(risk);
     } else {
@@ -158,17 +156,6 @@ function Workshop2(props) {
       )}
     </Container>
   );
-}
-
-{
-  /* Array(): 
-            {activity: "++" 
-            id: "aa1a384e-77ec-4c86-8570-27c8f721fe22" 
-            motivation: "++"objectif: "Saboter la camp..."
-            pertinence: 2
-            ressource: "+"
-            sourceRisk: "Hacktiviste"}
-            {...}*/
 }
 
 Workshop2.propTypes = {
