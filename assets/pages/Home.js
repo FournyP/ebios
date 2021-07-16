@@ -72,6 +72,10 @@ function Home() {
 
   const tableColumns = React.useMemo(() => [
     {
+      Header: "Id",
+      accessor: "id",
+    },
+    {
       Header: "Name",
       accessor: "name",
     },
